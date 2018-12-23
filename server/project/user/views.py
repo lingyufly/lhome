@@ -13,14 +13,9 @@ from auth.views import login_required, admin_required, login_user, logout_user
 
 muser=Blueprint('muser', __name__)
 
-
-
 @muser.route('checkusername', methods=['POST',])
 def checkusername():
-    if request.method =='POST':
-        args=request.form
-    else:
-        args=request.args
+    args=request.form
     username=args.get('username', None)
     if username is None:
         return jsonify({'code':-1,'msg':'username is none'})
@@ -38,10 +33,7 @@ def checkusername():
 
 @muser.route('register', methods=['POST',])
 def register():
-    if request.method =='POST':
-        args=request.form
-    else:
-        args=request.args
+    args=request.form
     username=args.get('username',None) 
     password=args.get('password', None) 
     if username is None or password is None:
@@ -91,17 +83,14 @@ def register():
 @login_required
 @admin_required
 def deleteuser():
-    if request.method =='POST':
-        args=request.form
-    else:
-        args=request.args
-    username=args.get('username',None) 
-    if username is None:
-        return jsonify({'code':-1,'msg':'username is none'})
+    args=request.form
+    userid=args.get('userid',None) 
+    if userid is None:
+        return jsonify({'code':-1,'msg':'userid is none'})
     
     db=get_db()
     try:
-        db.execute('delete from user where username= ?;', (username,))
+        db.execute('delete from user where id= ?;', (userid,))
         db.commit()
     except Exception as err:
         return jsonify({'code':-1,'msg':'exec sql error: '+str(err)})
@@ -112,11 +101,8 @@ def deleteuser():
 @login_required
 @admin_required
 def modifyuser():
-    if request.method =='POST':
-        args=request.form
-    else:
-        args=request.args
-    username=args.get('username',None) 
-    if username is None:
-        return jsonify({'code':-1,'msg':'username is none'})
+    args=request.form
+    userid=args.get('userid',None) 
+    if userid is None:
+        return jsonify({'code':-1,'msg':'userid is none'})
     return jsonify({'code':0,'msg':'modify ok'})

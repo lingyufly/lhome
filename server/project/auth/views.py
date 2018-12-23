@@ -15,7 +15,7 @@ mauth=Blueprint('mauth', __name__)
 def login_required(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        if session.get('username'):
+        if session.get('userid'):
             return func(*args, **kwargs)
         else:
             return jsonify({'code':-1, 'msg':'login first'})
@@ -24,40 +24,32 @@ def login_required(func):
 def admin_required(func):
     @wraps(func)
     def wrapper(*args, **kwargs):
-        if request.method =='POST':
-            params=request.form
-        else:
-            param=request.args
-        username=params.get('username',None) 
-        if username is None:
-            return jsonify({'code':-1,'msg':'username is none'})
-        if username!=session.get('username') and session.get('isadmin')!=True:
+        params=request.form
+        userid=params.get('userid',None) 
+        if userid is None:
+            return jsonify({'code':-1,'msg':'userid is none'})
+        if userid!=session.get('userid') and session.get('isadmin')!=True:
             return jsonify({'code':-1,'msg':'Dosen\'t have authority'})
         else:
             return func(*args, **kwargs)
     return wrapper
 
 
-def login_user(username, isadmin=False):
-    session['username']=username
+def login_user(userid, isadmin=False):
+    session['userid']=userid
     session['isadmin']=isadmin
     session.permanent=True
 
-def logout_user(username):
-    session['username']=username
+def logout_user(userid):
+    session['userid']=userid
     session['isadmin']=False
-    session.pop('username')
+    session.pop('userid')
     session.pop('isadmin')
     session.clear()
 
-
-
 @mauth.route('login', methods=['POST',])
 def login():
-    if request.method =='POST':
-        args=request.form
-    else:
-        args=request.args
+    args=request.form
     username=args.get('username',None) 
     password=args.get('password', None) 
     if username is None or password is None:
@@ -66,24 +58,24 @@ def login():
     db=get_db()
 
     try:
-        res=db.execute('select username, password, isadmin from user where username=?', (username,)).fetchone()
+        res=db.execute('select id, username, password, isadmin from user where username=?', (username,)).fetchone()
     except Exception as err:
         return jsonify({'code':-1,'msg':'exec sql error: '+str(err)})
-    if res is not None and res[0]==username and res[1]==password:
-        login_user(username, True if res[2]==1 else False)
+    if res is not None and res[1]==username and res[2]==password:
+        login_user(res[0], True if res[3]==1 else False)
         return jsonify({'code':0,'msg':'user login'})
     else:
         return jsonify({'code':-1,'msg':'username or password is wrong'})
 
 @mauth.route('logout', methods=['POST',])
 @login_required
+@admin_required
 def logout():
-    if request.method =='POST':
-        args=request.form
-    else:
-        args=request.args
-    username=args.get('username',None) 
-    if username is None:
-        return jsonify({'code':-1,'msg':'username is none'})
-    logout_user(username)
+    args=request.form
+    userid=args.get('userid',None) 
+    if userid is None:
+        return jsonify({'code':-1,'msg':'userid is none'})
+    logout_user(userid)
     return jsonify({'code':0,'msg':'user logout'})
+
+
