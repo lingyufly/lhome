@@ -21,7 +21,7 @@ def checkusername():
         return jsonify({'code':-1,'msg':'username is none'})
     db=get_db();
     try:
-        res=db.execute('select count(*) from user where username= ? ', [username,]).fetchone()
+        res=db.execute('select count(*) from user_tab where username= ? ', [username,]).fetchone()
     except Exception as err:
         return jsonify({'code':-1,'msg':'exec sql error: '+str(err)})
 
@@ -46,30 +46,30 @@ def register():
     mobile=args.get('mobile', None)
 
     columns='username, password, isadmin'
-    vv='?,?,?'
+    params='?,?,?'
     vals=[username, password, False]
     if description is not None:
         columns+=',description'
-        vv+=',?'
+        params+=',?'
         vals.append(description)
     if birthday is not None:
         columns+=',birthday'
-        vv+=',?'
+        params+=',?'
         vals.append(birthday)
     if gender is not None:
         columns+=',gender'
-        vv+=',?'
+        params+=',?'
         vals.append(gender)
     if email is not None:
         columns+=',email'
-        vv+=',?'
+        params+=',?'
         vals.append(email)
     if mobile is not None:
         columns+=',mobile'
-        vv+=',?'
+        params+=',?'
         vals.append(mobile)
 
-    sql='insert into user('+columns+') values('+vv+');'
+    sql='insert into user_tab('+columns+') values('+params+');'
     db=get_db()
     try:
         db.execute(sql, vals)
@@ -90,7 +90,7 @@ def deleteuser():
     
     db=get_db()
     try:
-        db.execute('delete from user where id= ?;', (userid,))
+        db.execute('delete from user_tab where id= ?;', (userid,))
         db.commit()
     except Exception as err:
         return jsonify({'code':-1,'msg':'exec sql error: '+str(err)})

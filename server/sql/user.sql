@@ -12,7 +12,7 @@ CREATE TABLE user_tab(
   birthday DATE NOT NULL DEFAULT CURRENT_DATE,
   email VARCHAR(127),
   mobile VARCHAR(11),
-  image VARCHAR(100) NOT NULL,
+  image VARCHAR(100),
   isadmin BOOL NOT NULL
 );
 INSERT INTO user_tab(username, password, descripment, isadmin) values('admin', 'admin', 'administrator', 1);
