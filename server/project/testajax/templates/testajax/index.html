@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<meta name="viewport" content="initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+		<script type="text/javascript" src="/testajax/testajax/js/jquery-2.1.0.js/"></script>
+		<title>Test Ajax Request</title>
+	</head>
+
+	<body>
+		<table>
+			<tr>
+				<td>
+					<input type="url" id="requesturl" value="http://127.0.0.1:8000/ajax_json" style="width: 300px;" />
+				</td>
+				<td>
+					<select name="type" id="typeSelect">
+						<option value="0">post</option>
+						<option value="1">get</option>
+					</select>
+				</td>
+			</tr>
+		</table>
+		<table id="dataTable">
+
+		</table>
+		<table>
+			<tr>
+				<td>
+					<input type="button" id="addRowBtn" value="AddRow" onclick="addRow()" />
+				</td>
+				<td>
+					<input type="button" id="resetBtn" value="Reset" onclick="reset()" />
+				</td>
+				<td>
+					<input type="button" id="requestBtn" value="Request" onclick="request()" />
+				</td>
+			</tr>
+		</table>
+		<table>
+			<tr>
+				<td><div>Result: </div></td>
+				<td><div id="result"></div></td>
+			</tr>
+			<tr>
+				<td><div>Log: </div></td>
+				<td><div id='log'></div></td>
+			</tr>
+		</table>
+
+		<script type="text/javascript">
+			var rowCount = 0;
+
+			function addRow() {
+				var rowHtml = '<tr>' +
+					'<td><input type="text" id="keytext' + rowCount + '" value="" /></td>' +
+					'<td><input type="text" id="valuetext' + rowCount + '" value="" /></td>' +
+					'</tr>';
+				jQuery("#dataTable").append(rowHtml);
+				rowCount++;
+			}
+
+			function reset() {
+				jQuery("#dataTable tr").remove();
+				rowCount = 0;
+				addRow();
+				addRow();
+				jQuery('#log').text('');
+				jQuery('#result').text('');
+			}
+
+			function request() {
+				jQuery('#log').text('');
+				jQuery('#result').text('');
+
+				var type = jQuery("#typeSelect option:selected").text();
+				var url = jQuery("#requesturl").val();
+				var data = {};
+				for(var i = 0; i < rowCount; i++) {
+					var key = jQuery("#keytext" + i).val();
+					var value = jQuery("#valuetext" + i).val();
+					if (key=='')
+						continue;
+					data[key] = value;
+				}
+				jQuery('#log').text(JSON.stringify(data))
+				jQuery.ajax({
+					url: url,
+					type: type,
+					data: data,
+					dataType: 'json',
+					async: false,
+					success: function(data) {
+						jQuery('#result').text(JSON.stringify(data))
+					}
+				})
+				return;
+			}
+
+			jQuery(function() {
+				addRow();
+				addRow();
+			})
+		</script>
+	</body>
+
+</html>
