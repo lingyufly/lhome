@@ -7,7 +7,7 @@ CREATE TABLE user_tab(
   username VARCHAR(30) NOT NULL UNIQUE,
   password VARCHAR(127) NOT NULL,
   createdate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  descripment VARCHAR(100),
+  description VARCHAR(100),
   gender VARCHAR(6),
   birthday DATE NOT NULL DEFAULT CURRENT_DATE,
   email VARCHAR(127),
