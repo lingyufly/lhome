@@ -30,7 +30,8 @@ def createapp():
     from auth.views import mauth
     app.register_blueprint(mauth, url_prefix='/auth/')
     from testajax.views import testajax 
-    app.register_blueprint(testajax, url_prefix='/')
+    app.register_blueprint(testajax, url_prefix='/testajax/')
+
     return app
 
 
