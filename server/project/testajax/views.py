@@ -1,8 +1,8 @@
 
-from flask import Blueprint, render_template, abort, request, flash, redirect, url_for, jsonify
+from flask import Blueprint, render_template, abort, request, flash, redirect, url_for, jsonify, current_app as mapp
 
 
-testajax=Blueprint('testajax', __name__, template_folder='templates', static_folder='static', static_url_path='testajax')
+testajax=Blueprint('testajax', __name__, template_folder='templates', static_folder='static', static_url_path='static')
 
 @testajax.route('/')
 def testfunc():

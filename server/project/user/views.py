@@ -34,6 +34,12 @@ def checkusername():
 @muser.route('register', methods=['POST',])
 def register():
     args=request.form
+    #file=request.files['file']
+    print(request.files)
+    # file_name=file.filename
+    # print(file_name)
+    return 'ok'
+
     username=args.get('username',None) 
     password=args.get('password', None) 
     if username is None or password is None:
