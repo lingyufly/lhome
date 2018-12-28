@@ -4,6 +4,7 @@
 import json
 
 from functools import wraps
+import random
 from flask import (Blueprint, abort, flash, jsonify, redirect, render_template,
                    request, url_for, session)
 
@@ -34,12 +35,6 @@ def checkusername():
 @muser.route('register', methods=['POST',])
 def register():
     args=request.form
-    #file=request.files['file']
-    print(request.files)
-    # file_name=file.filename
-    # print(file_name)
-    return 'ok'
-
     username=args.get('username',None) 
     password=args.get('password', None) 
     if username is None or password is None:
@@ -112,3 +107,14 @@ def modifyuser():
     if userid is None:
         return jsonify({'code':-1,'msg':'userid is none'})
     return jsonify({'code':0,'msg':'modify ok'})
+
+
+@muser.route('uploadphoto', methods=['POST',])
+@login_required
+def uploadphoto():
+    photo=request.files.get('photo', None)
+    if photo is None:
+        return jsonify({'code':0,'msg':'upload photo error'})
+    filename='photo/photo_%05d.png' % (session.get('userid'))
+    photo.save(filename)
+    return jsonify({'code':0,'msg':'upload photo ok'})

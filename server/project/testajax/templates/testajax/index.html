@@ -23,12 +23,7 @@
 			</tr>
 		</table>
 		<table id="dataTable">
-
 		</table>
-		<form>
-			<input id="chooseImg", type="file", accept="image/*"/>
-			<img id="previewImg" src="" />
-		</form>
 		<table>
 			<tr>
 				<td>
@@ -42,6 +37,14 @@
 				</td>
 			</tr>
 		</table>
+
+		<!-- upload photo -->
+		<div>
+			<img id="previewImg" src="" />
+			<input id="chooseImg", name='photo', type="file", accept="image/*"/>
+			<input type="button" value="Upload Photo", onclick="uploadphoto()" />
+		</div>
+
 		<table>
 			<tr>
 				<td><div>Result: </div></td>
@@ -88,9 +91,6 @@
 						continue;
 					data[key] = value;
 				}
-				var imgsrc=jQuery('#previewImg').attr('src');
-				if (imgsrc!='')
-					data['img']=imgsrc;
 				jQuery('#log').text(JSON.stringify(data))
 				jQuery.ajax({
 					url: url,
@@ -105,13 +105,41 @@
 				return;
 			}
 
+			function uploadphoto(){
+				jQuery('#log').text('');
+				jQuery('#result').text('');
+
+				var type = jQuery("#typeSelect option:selected").text();
+				var url = jQuery("#requesturl").val();
+				var data = new FormData();
+				var imgsrc=jQuery('#previewImg').attr('src');
+				// use FormData for load file
+				if (imgsrc!='') {
+					data.append('photo', jQuery('#chooseImg')[0].files[0]);
+				}
+				jQuery.ajax({
+					url: url,
+					type: type,
+					data: data,
+					dataType: 'json',
+					async: false,
+					// important for load file
+					cache: false,
+					processData: false,
+					contentType: false,
+					success: function(data) {
+						jQuery('#result').text(JSON.stringify(data))
+					}
+				})
+				return;
+			}
+
 			jQuery(function() {
 				addRow();
 				addRow();
 				jQuery("#chooseImg").on('change', function(){
 					filepath=jQuery('#chooseImg').val();
 					src=window.URL.createObjectURL(this.files[0]);
-					console.log(src);
 					jQuery("#previewImg").attr('src', src);
 					jQuery('#previewImg').show();
 				})
