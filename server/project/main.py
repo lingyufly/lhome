@@ -11,18 +11,12 @@
 
 from flask import Flask, flash, redirect, render_template, request, url_for
 from flask_cors import *
-from datetime import timedelta
+import config
 
 def createapp():
     app = Flask(__name__, template_folder='templates', static_folder='static')
     CORS(app, support_credentials=True)
-    import os
-    skey=os.urandom(24)
-    app.config.from_mapping(
-            SECRET_KEY=skey,
-            PERMANENT_SESSION_LIFETIME=timedelta(days=7),
-            DATABASE='instance/db.sqlite3',
-    )
+    app.config.from_object('config')
     import db
     db.init_app(app)
     from user.views import muser
