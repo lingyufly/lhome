@@ -28,6 +28,10 @@ def admin_required(func):
         userid=params.get('userid',None) 
         if userid is None:
             return jsonify({'code':-1,'msg':'userid is none'})
+        try:
+            userid=int(userid)
+        except Exception as err:
+            return jsonify({'code':-1,'msg':'get userid error: %s' %(str(err))})
         if userid!=session.get('userid') and session.get('isadmin')!=True:
             return jsonify({'code':-1,'msg':'Dosen\'t have authority'})
         else:
@@ -58,9 +62,9 @@ def login():
     db=get_db()
 
     try:
-        res=db.execute('select id, username, password, isadmin from user_tab where username=?', (username,)).fetchone()
+        res=db.execute('select userid, username, password, isadmin from user_tab where username=?', (username,)).fetchone()
     except Exception as err:
-        return jsonify({'code':-1,'msg':'exec sql error: '+str(err)})
+        return jsonify({'code':-1,'msg':'exec sql error: %s' %(str(err))})
     if res is not None and res[1]==username and res[2]==password:
         login_user(res[0], True if res[3]==1 else False)
         return jsonify({'code':0,'msg':'user login'})

@@ -40,9 +40,9 @@
 
 		<!-- upload photo -->
 		<div>
-			<img id="previewImg" src="" />
+			<img id="previewImg" src="" /></br>
 			<input id="chooseImg", name='photo', type="file", accept="image/*"/>
-			<input type="button" value="Upload Photo", onclick="uploadphoto()" />
+			<input type="button" value="Upload Photo", onclick="uploadphoto()" /></br>
 		</div>
 
 		<table>
@@ -116,6 +116,13 @@
 				// use FormData for load file
 				if (imgsrc!='') {
 					data.append('photo', jQuery('#chooseImg')[0].files[0]);
+				}
+				for(var i = 0; i < rowCount; i++) {
+					var key = jQuery("#keytext" + i).val();
+					var value = jQuery("#valuetext" + i).val();
+					if (key=='')
+						continue;
+					data.append(key, value);
 				}
 				jQuery.ajax({
 					url: url,
