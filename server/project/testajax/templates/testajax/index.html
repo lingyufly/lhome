@@ -100,6 +100,9 @@
 					async: false,
 					success: function(data) {
 						jQuery('#result').text(JSON.stringify(data))
+					},
+					error:function(data){
+						console.log(data)
 					}
 				})
 				return;
