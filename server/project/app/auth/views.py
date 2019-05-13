@@ -18,7 +18,7 @@ def login_required(func):
         if session.get('userid'):
             return func(*args, **kwargs)
         else:
-            return jsonify({'code':-1, 'msg':'login first'})
+            return jsonify(code=-1, msg='login first')
     return wrapper
 
 def admin_required(func):
@@ -27,13 +27,13 @@ def admin_required(func):
         params=request.form
         userid=params.get('userid',None) 
         if userid is None:
-            return jsonify({'code':-1,'msg':'userid is none'})
+            return jsonify(code=-1, msg='userid is none')
         try:
             userid=int(userid)
         except Exception as err:
-            return jsonify({'code':-1,'msg':'get userid error: %s' %(str(err))})
+            return jsonify(code=-1, msg='get userid error: %s' %(str(err)))
         if userid!=session.get('userid') and session.get('isadmin')!=True:
-            return jsonify({'code':-1,'msg':'Dosen\'t have authority'})
+            return jsonify(code=-1, msg='Dosen\'t have authority')
         else:
             return func(*args, **kwargs)
     return wrapper
@@ -57,19 +57,19 @@ def login():
     username=args.get('username',None) 
     password=args.get('password', None) 
     if username is None or password is None:
-        return jsonify({'code':-1,'msg':'username or password is none'})
+        return jsonify(code=-1, msg='username or password is none')
 
     db=get_db()
 
     try:
         res=db.execute('select userid, username, password, isadmin from user_tab where username=?', (username,)).fetchone()
     except Exception as err:
-        return jsonify({'code':-1,'msg':'exec sql error: %s' %(str(err))})
+        return jsonify(code=-1, msg='exec sql error: %s' %(str(err)))
     if res is not None and res[1]==username and res[2]==password:
         login_user(res[0], True if res[3]==1 else False)
-        return jsonify({'code':0,'msg':'user login'})
+        return jsonify(code=0, msg='user login')
     else:
-        return jsonify({'code':-1,'msg':'username or password is wrong'})
+        return jsonify(code=-1, msg='username or password is wrong')
 
 @mauth.route('logout', methods=['POST',])
 @login_required
@@ -78,8 +78,8 @@ def logout():
     args=request.form
     userid=args.get('userid',None) 
     if userid is None:
-        return jsonify({'code':-1,'msg':'userid is none'})
+        return jsonify(code=-1, msg='userid is none')
     logout_user(userid)
-    return jsonify({'code':0,'msg':'user logout'})
+    return jsonify(code=0, msg='user logout')
 
 

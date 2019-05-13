@@ -19,17 +19,17 @@ def createbillbook():
     args=request.form
     bookname=args.get('bookname', None)
     if bookname is None:
-        return jsonify({'code':-1,'msg':'Book name is none'})
+        return jsonify(code=-1, msg='Book name is none')
     userid=args.get('userid', None)
     if userid is None:
-        return jsonify({'code':-1,'msg':'userid is none'})
+        return jsonify(code=-1, msg='userid is none')
     description=args.get('description', '')
     db=get_db()
     try:
         sql='insert into billbook_tab(bookname, userid, description) values(?,?,?);'
         db.execute(sql, (bookname, userid, description))
     except Exception as err:
-        return jsonify({'code':-1,'msg':'exec sql error: %s' %(str(err))})
+        return jsonify(code=-1, msg='exec sql error: %s' %(str(err)))
 
     res=db.execute('select bookid from billbook_tab where bookname=? and userid=?;', (bookname, userid)).fetchone()
     bookid=res[0]

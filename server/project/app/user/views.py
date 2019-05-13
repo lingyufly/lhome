@@ -18,24 +18,24 @@ def checkusername():
     args=request.form
     username=args.get('username', None)
     if username is None:
-        return jsonify({'code':-1,'msg':'username is none'})
-    db=get_db();
+        return jsonify(code=-1, msg='username is none')
+    db=get_db()
     try:
         res=db.execute('select count(*) from user_tab where username= ? ', [username,]).fetchone()
     except Exception as err:
-        return jsonify({'code':-1,'msg':'exec sql error: %s' %(str(err))})
+        return jsonify(code=-1, msg='exec sql error: %s' %(str(err)))
 
     if res[0]==0:
-        return jsonify({'code':0,'msg':'username is valid'})
+        return jsonify(code=0, msg='username is valid')
     else:
-        return jsonify({'code':-1,'msg':'username is unvalid'})
+        return jsonify(code=-1, msg='username is unvalid')
 
 
 @muser.route('register', methods=['POST',])
 def register():
     args=request.form
     if args.get('username', None) is None or args.get('password', None) is None:
-        return jsonify({'code':-1,'msg':'username or password is none'})
+        return jsonify(code=-1, msg='username or password is none')
 
     columns=[]
     params=[]
@@ -51,8 +51,8 @@ def register():
         db.execute(sql, vals)
         db.commit()
     except Exception as err:
-        return jsonify({'code':-1,'msg':'exec sql error: %s' %(str(err))})
-    return jsonify({'code':0,'msg':'insert ok'})
+        return jsonify(code=-1, msg='exec sql error: %s' %(str(err)))
+    return jsonify(code=0, msg='insert ok')
 
 
 @muser.route('deleteuser', methods=['POST',])
@@ -62,15 +62,15 @@ def deleteuser():
     args=request.form
     userid=args.get('userid',None) 
     if userid is None:
-        return jsonify({'code':-1,'msg':'userid is none'})
+        return jsonify(code=-1, msg='userid is none')
     
     db=get_db()
     try:
         db.execute('delete from user_tab where userid= ?;', (userid,))
         db.commit()
     except Exception as err:
-        return jsonify({'code':-1,'msg':'exec sql error: %s' %(str(err))})
-    return jsonify({'code':0,'msg':'delete ok'})
+        return jsonify(code=-1, msg='exec sql error: %s' %(str(err)))
+    return jsonify(code=0, msg='delete ok')
 
 
 @muser.route('modifyuser', methods=['POST',])
@@ -80,7 +80,7 @@ def modifyuser():
     args=request.form
     userid=args.get('userid',None) 
     if userid is None:
-        return jsonify({'code':-1,'msg':'userid is none'})
+        return jsonify(code=-1, msg='userid is none')
 
     columns=[]
     vals=[]
@@ -97,26 +97,25 @@ def modifyuser():
         db.execute(sql, vals)
         db.commit()
     except Exception as err:
-        return jsonify({'code':-1,'msg':'exec sql error: %s' %(str(err))})
+        return jsonify(code=-1, msg='exec sql error: %s' %(str(err)))
 
-    return jsonify({'code':0,'msg':'modify ok'})
+    return jsonify(code=0, msg='modify ok')
 
 @muser.route('getuserinfo', methods=['POST',])
 @login_required
 def getuserinfo():
     userid=request.form.get('userid', None)
     if userid is None:
-        return jsonify({'code':-1,'msg':'userid is none'})
+        return jsonify(code=-1, msg='userid is none')
 
     sql='select * from user_tab where userid=?;'
     db=get_db()
     try:
         res=db.execute(sql, userid).fetchone()
     except Exception as err:
-        return jsonify({'code':-1,'msg':'exec sql error: %s' %(str(err))})
+        return jsonify(code=-1, msg='exec sql error: %s' %(str(err)))
     data={key: res[i] for i, key in enumerate(res.keys())}
-    data=json.dumps(data)
-    return jsonify({'code':0,'msg':'get userinfo ok', 'data':data})
+    return jsonify(code=0, msg='get userinfo ok', result=data)
 
 @muser.route('uploadphoto', methods=['POST',])
 @login_required
@@ -124,18 +123,18 @@ def uploadphoto():
     args=request.form
     userid=args.get('userid',None) 
     if userid is None:
-        return jsonify({'code':-1,'msg':'userid is none'})
+        return jsonify(code=-1, msg='userid is none')
 
     photo=request.files.get('photo', None)
     if photo is None:
-        return jsonify({'code':0,'msg':'upload photo error'})
+        return jsonify(code=0, msg='upload photo error')
 
     filename='photo_%05d.png' % (session.get('userid'))
     try:
         dir=current_app.config['PHOTODIR']
         photo.save(dir+filename)
     except Exception as err:
-        return jsonify({'code':0,'msg':'save photo error: %s' %(str(err))})
+        return jsonify(code=0, msg='save photo error: %s' %(str(err)))
 
     sql='update user_tab set photo=? where userid=?;'
     db=get_db()
@@ -143,6 +142,6 @@ def uploadphoto():
         db.execute(sql, [filename, userid])
         db.commit()
     except Exception as err:
-        return jsonify({'code':-1,'msg':'exec sql error: %s' %(str(err))})
+        return jsonify(code=-1, msg='exec sql error: %s' %(str(err)))
 
-    return jsonify({'code':0,'msg':'upload photo ok'})
+    return jsonify(code=0, msg='upload photo ok')
