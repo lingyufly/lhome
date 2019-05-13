@@ -7,9 +7,9 @@ from functools import wraps
 from flask import (Blueprint, abort, flash, jsonify, redirect, render_template,
                    request, url_for, session)
 
-from db import get_db
+from db.db import get_db
 
-from auth.views import login_required
+from app.auth.views import login_required
 
 mbill=Blueprint('mbill', __name__)
 

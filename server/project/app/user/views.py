@@ -7,9 +7,9 @@ import random
 from flask import (Blueprint, abort, flash, jsonify, redirect, render_template,
                    request, url_for, session, current_app)
 
-from db import get_db
+from db.db import get_db
 
-from auth.views import login_required, admin_required, login_user, logout_user
+from app.auth.views import login_required, admin_required, login_user, logout_user
 
 muser=Blueprint('muser', __name__)
 

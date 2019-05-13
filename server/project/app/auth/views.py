@@ -7,7 +7,7 @@ from functools import wraps
 from flask import (Blueprint, abort, flash, jsonify, redirect, render_template,
                    request, url_for, session)
 
-from db import get_db
+from db.db import get_db
 
 mauth=Blueprint('mauth', __name__)
 
