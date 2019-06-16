@@ -21,7 +21,7 @@ def checkusername():
         return jsonify(code=-1, msg='username is none')
     db=get_db()
     try:
-        res=db.execute('select count(*) from user_tab where username= ? ', [username,]).fetchone()
+        res=db.execute('select count(*) from user_tab where name= ? ', [username,]).fetchone()
     except Exception as err:
         return jsonify(code=-1, msg='exec sql error: %s' %(str(err)))
 
@@ -40,9 +40,47 @@ def register():
     columns=[]
     params=[]
     vals=[]
-    for key, value in args.items():
-        columns.append(key)
-        vals.append(value)
+    
+    username=args.get('username', None)
+    password=args.get('password', None)
+    createdate=args.get('createdate', None)
+    description=args.get('description', None)
+    gender=args.get('gender', None)
+    birthday=args.get('birthday', None)
+    email=args.get('email', None)
+    mobile=args.get('mobile', None)
+
+    if username is not None:
+        columns.append('name')
+        vals.append(username)
+        params.append('?')
+    if password is not None:
+        columns.append('password')
+        vals.append(password)
+        params.append('?')
+    if createdate is not None:
+        columns.append('createdate')
+        vals.append(createdate)
+        params.append('?')
+    if description is not None:
+        columns.append('description')
+        vals.append(description)
+        params.append('?')
+    if gender is not None:
+        columns.append('gender')
+        vals.append(gender)
+        params.append('?')
+    if birthday is not None:
+        columns.append('birthday')
+        vals.append(birthday)
+        params.append('?')
+    if email is not None:
+        columns.append('email')
+        vals.append(email)
+        params.append('?')
+    if mobile is not None:
+        columns.append('mobile')
+        vals.append(mobile)
         params.append('?')
     
     sql='insert into user_tab(%s) values(%s);' %(','.join(columns), ','.join(params))
@@ -66,7 +104,7 @@ def deleteuser():
     
     db=get_db()
     try:
-        db.execute('delete from user_tab where userid= ?;', (userid,))
+        db.execute('delete from user_tab where id= ?;', (userid,))
         db.commit()
     except Exception as err:
         return jsonify(code=-1, msg='exec sql error: %s' %(str(err)))
@@ -84,14 +122,50 @@ def modifyuser():
 
     columns=[]
     vals=[]
-    for key, value in args.items():
-        if key=='userid':
-            continue
-        columns.append(key+'=?')
-        vals.append(value)
+    username=args.get('username', None)
+    password=args.get('password', None)
+    createdate=args.get('createdate', None)
+    description=args.get('description', None)
+    gender=args.get('gender', None)
+    birthday=args.get('birthday', None)
+    email=args.get('email', None)
+    mobile=args.get('mobile', None)
+
+    if username is not None:
+        columns.append('name')
+        vals.append(username)
+        params.append('?')
+    if password is not None:
+        columns.append('password')
+        vals.append(password)
+        params.append('?')
+    if createdate is not None:
+        columns.append('createdate')
+        vals.append(createdate)
+        params.append('?')
+    if description is not None:
+        columns.append('description')
+        vals.append(description)
+        params.append('?')
+    if gender is not None:
+        columns.append('gender')
+        vals.append(gender)
+        params.append('?')
+    if birthday is not None:
+        columns.append('birthday')
+        vals.append(birthday)
+        params.append('?')
+    if email is not None:
+        columns.append('email')
+        vals.append(email)
+        params.append('?')
+    if mobile is not None:
+        columns.append('mobile')
+        vals.append(mobile)
+        params.append('?')
     
     vals.append(userid)
-    sql='update user_tab set %s where userid=?;' %(','.join(columns))
+    sql='update user_tab set %s where id=?;' %(','.join(columns))
     db=get_db()
     try:
         db.execute(sql, vals)
@@ -108,7 +182,7 @@ def getuserinfo():
     if userid is None:
         return jsonify(code=-1, msg='userid is none')
 
-    sql='select * from user_tab where userid=?;'
+    sql='select * from user_tab where id=?;'
     db=get_db()
     try:
         res=db.execute(sql, userid).fetchone()
@@ -136,7 +210,7 @@ def uploadphoto():
     except Exception as err:
         return jsonify(code=0, msg='save photo error: %s' %(str(err)))
 
-    sql='update user_tab set photo=? where userid=?;'
+    sql='update user_tab set photo=? where id=?;'
     db=get_db()
     try:
         db.execute(sql, [filename, userid])

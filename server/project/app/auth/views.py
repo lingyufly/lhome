@@ -62,7 +62,7 @@ def login():
     db=get_db()
 
     try:
-        res=db.execute('select userid, username, password, isadmin from user_tab where username=?', (username,)).fetchone()
+        res=db.execute('select id, name, password, isadmin from user_tab where name=?', (username,)).fetchone()
     except Exception as err:
         return jsonify(code=-1, msg='exec sql error: %s' %(str(err)))
     if res is not None and res[1]==username and res[2]==password:
@@ -73,7 +73,6 @@ def login():
 
 @mauth.route('logout', methods=['POST',])
 @login_required
-@admin_required
 def logout():
     args=request.form
     userid=args.get('userid',None) 

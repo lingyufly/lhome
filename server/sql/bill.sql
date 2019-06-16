@@ -1,7 +1,7 @@
 --- 开启外键约束
 PRAGMA FOREIGN_KEYS=ON;
 -- Cash  Debit Card Credit Card Electronic Account
-DROP TABLE IF EXISTS accountype_tab;
+DROP TABLE IF EXISTS accounttype_tab;
 CREATE TABLE accounttype_tab(
   accounttypeid INTEGER PRIMARY KEY AUTOINCREMENT,
   description VARCHAR(30),

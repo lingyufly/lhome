@@ -3,8 +3,8 @@ PRAGMA FOREIGN_KEYS=ON;
 
 DROP TABLE IF EXISTS user_tab;
 CREATE TABLE user_tab(
-  userid INTEGER PRIMARY KEY AUTOINCREMENT,
-  username VARCHAR(30) NOT NULL UNIQUE,
+  id INTEGER PRIMARY KEY AUTOINCREMENT,
+  name VARCHAR(30) NOT NULL UNIQUE,
   password VARCHAR(127) NOT NULL,
   createdate DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   description VARCHAR(100),
@@ -15,4 +15,4 @@ CREATE TABLE user_tab(
   photo VARCHAR(100),
   isadmin BOOL NOT NULL DEFAULT 0
 );
-INSERT INTO user_tab(username, password, description, isadmin) values('admin', 'admin', 'administrator', 1);
+INSERT INTO user_tab(name, password, description, isadmin) values('admin', 'admin', 'administrator', 1);
