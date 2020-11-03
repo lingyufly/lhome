@@ -13,3 +13,6 @@ from user import user
 app.register_blueprint(user, url_prefix='/user')
 from auth import mauth
 app.register_blueprint(mauth, url_prefix='/auth')
+
+from testajax import testajax
+app.register_blueprint(testajax, url_prefix="/testajax")

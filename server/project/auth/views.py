@@ -34,7 +34,7 @@ def admin_required(func):
         try:
             userid = int(userid)
         except Exception as err:
-            return jsonify(code=-1, msg='get userid error: %s' % (str(err)))
+            return jsonify(code=-1, msg='get userid error: {}'.format(err))
         if userid != session.get('userid') and session.get('isadmin') != True:
             return jsonify(code=-1, msg='Dosen\'t have authority')
         else:
@@ -64,14 +64,12 @@ def login():
     password = args.get('password', None)
     if username is None or password is None:
         return jsonify(code=-1, msg='username or password is none')
-    return jsonify(code=0, msg='user login')
 
-    try:
-        res = User.qurey.filter(User.name == username).one()
-    except Exception as err:
-        return jsonify(code=-1, msg='query error: %s' % (str(err)))
+    res = User.query.filter_by(name=username).first()
+
     if res is not None and res.name == username and res.password == password:
-        login_user(res.id, True if res.isAdmin == 1 else False)
+        #临时处理，所有登陆用户都是管理员
+        login_user(res.id, True)
         return jsonify(code=0, msg='user login')
     else:
         return jsonify(code=-1, msg='username or password is wrong')
