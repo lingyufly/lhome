@@ -12,6 +12,9 @@ from auth.views import login_required, admin_required, login_user, logout_user
 from db import db
 from . import user
 from .models import User, Family
+'''
+用户管理部分
+'''
 
 
 def usernameValid(username):
@@ -19,10 +22,13 @@ def usernameValid(username):
     return False if rcd else True
 
 
-@user.route('checkusername', methods=[
+@user.route('usernamecheck', methods=[
     'POST',
 ])
-def checkusername():
+def usernamecheck():
+    '''
+    检查用户名是否冲突
+    '''
     args = request.form
     username = args.get('username', None)
     if username is None:
@@ -34,10 +40,13 @@ def checkusername():
         return jsonify(code=0, msg='username is valid')
 
 
-@user.route('register', methods=[
+@user.route('registeruser', methods=[
     'POST',
 ])
-def register():
+def registeruser():
+    '''
+    用户注册
+    '''
     args = request.form
 
     username = args.get('username', None)
@@ -69,8 +78,11 @@ def register():
     'POST',
 ])
 @login_required
-@admin_required
 def deleteuser():
+    '''
+    删除用户。
+    如果是当前用户，则不需要管理员权限，否则需要管理员权限
+    '''
     args = request.form
     userid = args.get('userid', None)
     if userid is None:
@@ -92,8 +104,10 @@ def deleteuser():
     'POST',
 ])
 @login_required
-@admin_required
 def modifyuser():
+    '''
+    修改用户信息
+    '''
     args = request.form
     userid = args.get('userid', None)
     if userid is None:
@@ -137,6 +151,9 @@ def modifyuser():
 ])
 @login_required
 def getuserinfo():
+    '''
+    查询用户信息
+    '''
     userid = request.form.get('userid', None)
     if userid is None:
         return jsonify(code=-1, msg='userid is none')
@@ -153,6 +170,9 @@ def getuserinfo():
 ])
 @login_required
 def uploadphoto():
+    '''
+    上传用户头像
+    '''
     args = request.form
     userid = args.get('userid', None)
     if userid is None:
@@ -180,3 +200,72 @@ def uploadphoto():
         return jsonify(code=-1, msg='exec sql error: {}'.form(err))
 
     return jsonify(code=0, msg='upload photo ok')
+
+
+@user.route('queryuser', methods=[
+    'POST',
+])
+@login_required
+def queryuser():
+    '''
+    根据用户名模糊查询用户信息
+    '''
+    username = request.form.get('username', None)
+    rcds = []
+    if username:
+        rcds = db.session.query(User).filter(
+            User.name.like('%' + username + '%')).all()
+    else:
+        rcds = db.session.query(User).all()
+
+    userinfos = []
+    for rcd in rcds:
+        userinfos.append({'id': rcd.id, 'username': rcd.name})
+
+    return jsonify(code=0, result=userinfos)
+
+
+@user.route('joinfamily', methods=[
+    'POST',
+])
+@login_required
+def joinfamily():
+    '''
+    加入家庭
+    '''
+    familyid = request.form.get('familyid', None)
+    if not familyid:
+        return jsonify(code=-1, msg='family id is none')
+
+
+'''
+家庭管理部分
+'''
+
+
+@user.route('registerfamily', methods=[
+    'POST',
+])
+@login_required
+def registerfamily():
+    pass
+
+
+@user.route('deletefamily', methods=[
+    'POST',
+])
+@login_required
+def deletefamily():
+    pass
+
+
+def modifyfamily():
+    pass
+
+
+def getfamilyinfo():
+    pass
+
+
+def inviteuser():
+    pass

@@ -19,6 +19,7 @@ class User(db.Model):
     birthday = Column(DateTime, default=datetime.datetime.now())
     email = Column(String(length=255))
     mobile = Column(String(length=11))
+    offamily = Column(Integer, nullable=True)
 
     def to_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
