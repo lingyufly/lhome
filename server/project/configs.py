@@ -12,7 +12,8 @@ SQLALCHEMY_DATABASE_URI = DB_URI
 SQLALCHEMY_TRACK_MODIFICATIONS = False
 SQLALCHEMY_ECHO = True
 
-SECRET_KEY = os.urandom(24)
+# SECRET_KEY = os.urandom(24)
+SECRET_KEY = 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa'
 #PERMANENT_SESSION_LIFETIME = timedelta(days=7)
 DEBUG = True
 PHOTODIR = 'static/'

@@ -19,15 +19,14 @@ class User(db.Model):
     birthday = Column(DateTime, default=datetime.datetime.now())
     email = Column(String(length=255))
     mobile = Column(String(length=11))
-    offamily = Column(Integer, nullable=True)
 
     def to_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
-class Family(db.Model):
+class Group(db.Model):
     '''
-    家庭信息表
+    组信息表
     '''
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(length=20), nullable=False)
@@ -35,19 +34,22 @@ class Family(db.Model):
     createdate = Column(DateTime,
                         nullable=False,
                         default=datetime.datetime.now())
-    address = Column(String(length=255), nullable=False)
+    photo = Column(String(length=255), nullable=True)
+
+    def to_dict(self):
+        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
-class UserFamilyRelationship(db.Model):
+class UserGroupRelationship(db.Model):
     '''
-    家庭成员信息表
+    组成员信息表
 
-    一个家庭可以包含多个成员
+    一个组可以包含多个成员
 
-    一个用户可以属于多个家庭
+    一个用户可以属于多个组
     '''
     id = Column(Integer, primary_key=True, autoincrement=True)
     userid = Column(Integer, nullable=False)
-    familyid = Column(Integer, nullable=False)
+    groupid = Column(Integer, nullable=False)
     userisadmin = Column(Boolean)
-    UniqueConstraint(userid, familyid)
+    UniqueConstraint(userid, groupid)
