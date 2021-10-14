@@ -1,10 +1,9 @@
-from db import db
+from .db import Base
 import datetime
-from sqlalchemy import Table, Column, UniqueConstraint, Integer, Text, String, DateTime, Boolean, ForeignKey
+from sqlalchemy import Table, Column, UniqueConstraint, Integer, String, DateTime, Boolean, ForeignKey
 # from sqlalchemy.orm import relationship
 
-
-class User(db.Model):
+class User(Base):
     '''
     用户信息表
     '''
@@ -24,7 +23,7 @@ class User(db.Model):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
-class Group(db.Model):
+class Group(Base):
     '''
     组信息表
     '''
@@ -40,7 +39,7 @@ class Group(db.Model):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
-class UserGroupRelationship(db.Model):
+class UserGroupRelationship(Base):
     '''
     组成员信息表
 
