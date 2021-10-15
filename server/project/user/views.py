@@ -3,7 +3,7 @@
 '''
     @Author: Lingyu
     @Date: 2021-01-05 18:12:56
-    @LastEditTime: 2021-10-15 17:42:43
+    @LastEditTime: 2021-10-15 17:47:15
 
 用户管理部分
 包含用户的注册、删除、修改和查询功能。
@@ -218,7 +218,11 @@ def getuserinfo():
     if not userRcd:
         return make_response(code=1, msg='userid dose\'n exit')
 
-    return make_response(code=0, data=userRcd.to_dict())
+    data=userRcd.to_dict()
+    data["groups"]=[]
+    for grp in userRcd.groups:
+        data['groups'].append(grp.to_dict())
+    return make_response(code=0, data=data)
 
 
 @user.route('uploadphoto', methods=[
