@@ -1,5 +1,5 @@
 #!/usr/bin/env python
-# coding=utf-8
+# -*- coding: utf-8 -*-
 '''
     @Author: Lingyu
     @Date: 2021-01-05 18:12:56

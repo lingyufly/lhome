@@ -1,9 +1,9 @@
 #!/usr/bin/env python
-# coding=utf-8
+# -*- coding: utf-8 -*-
 '''
     @Author: Lingyu
     @Date: 2021-10-15 08:39:22
-    @LastEditTime: 2021-10-15 16:38:07
+    @LastEditTime: 2021-10-15 17:31:28
 '''
 
 from jinja2.utils import F
@@ -33,4 +33,8 @@ def create_app():
     return app
 
 
+if __name__=='__main__':
+    app=create_app()
+    import configs
+    app.run(port=configs.PORT)
 
