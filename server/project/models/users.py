@@ -1,12 +1,27 @@
+#!/usr/bin/env python
+# coding=utf-8
+'''
+    @Author: Lingyu
+    @Date: 2021-10-15 08:39:22
+    @LastEditTime: 2021-10-15 16:38:52
+'''
+
+from sqlalchemy.orm import relationship
 from .db import Base
 import datetime
-from sqlalchemy import Table, Column, UniqueConstraint, Integer, String, DateTime, Boolean, ForeignKey
-# from sqlalchemy.orm import relationship
+from sqlalchemy import Table, Column, Integer, String, DateTime, ForeignKey
+
+user_group = Table(
+    'user_group_tab',
+    Base.metadata,
+    Column('user_id', Integer, ForeignKey('user_tab.id', ondelete='CASCADE'), primary_key=True),
+    Column('group_id', Integer, ForeignKey('group_tab.id', ondelete='CASCADE'), primary_key=True))
 
 class User(Base):
     '''
     用户信息表
     '''
+    __tablename__ = 'user_tab'
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(length=20), unique=True, nullable=False)
     password = Column(String(length=255), nullable=False)
@@ -19,6 +34,9 @@ class User(Base):
     email = Column(String(length=255))
     mobile = Column(String(length=11))
 
+    # groups = relationship('Group', secondary=user_group, backref='users')
+    groups = relationship('Group', secondary=user_group, back_populates='users')
+
     def to_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
@@ -27,6 +45,7 @@ class Group(Base):
     '''
     组信息表
     '''
+    __tablename__ = 'group_tab'
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(length=20), nullable=False)
     description = Column(String(length=255), nullable=False)
@@ -35,20 +54,8 @@ class Group(Base):
                         default=datetime.datetime.now())
     photo = Column(String(length=255), nullable=True)
 
+    users = relationship('User', secondary=user_group, back_populates='groups')
+
     def to_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
-
-class UserGroupRelationship(Base):
-    '''
-    组成员信息表
-
-    一个组可以包含多个成员
-
-    一个用户可以属于多个组
-    '''
-    id = Column(Integer, primary_key=True, autoincrement=True)
-    userid = Column(Integer, nullable=False)
-    groupid = Column(Integer, nullable=False)
-    userisadmin = Column(Boolean)
-    UniqueConstraint(userid, groupid)

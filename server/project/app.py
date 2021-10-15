@@ -1,19 +1,36 @@
-from flask import Flask
-import configs
-from flask_cors import *
-from models import db
+#!/usr/bin/env python
+# coding=utf-8
+'''
+    @Author: Lingyu
+    @Date: 2021-10-15 08:39:22
+    @LastEditTime: 2021-10-15 16:38:07
+'''
 
-app = Flask(__name__)
-CORS(app, support_credentials=True)
-app.config.from_object(configs)
+from jinja2.utils import F
 
-db.init_app(app)
 
-# from user import user
-# app.register_blueprint(user, url_prefix='/user')
-# from auth import mauth
-# app.register_blueprint(mauth, url_prefix='/auth')
+def create_app():
+    from flask import Flask
+    app = Flask(__name__)
 
-from testajax import testajax
-app.register_blueprint(testajax, url_prefix="/testajax")
+    from flask_cors import CORS
+    CORS(app, support_credentials=True)
+
+    import configs
+    app.config.from_object(configs)
+
+    from utils.hook import hook_init
+    hook_init(app)
+    
+    from models import db
+    db.init_app(app)
+
+    from user import user
+    app.register_blueprint(user, url_prefix='/user')
+    from auth import mauth
+    app.register_blueprint(mauth, url_prefix='/auth')
+
+    return app
+
+
 
