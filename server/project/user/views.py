@@ -1,22 +1,19 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 '''
-    @Author: Lingyu
-    @Date: 2021-01-05 18:12:56
-    @LastEditTime: 2021-10-15 17:47:15
-
+@Author: Lingyu
+@Date: 2021-10-19
+@Description: 
 用户管理部分
 包含用户的注册、删除、修改和查询功能。
 '''
 
 from flask import request, g
 
-from . import user
+from .base import user
 from auth.views import login_required, userisgroupadmin
-from models import dbse
-from models.users import User, Group
+from models import dbse,User, Group
 from utils import logger, make_response
-import configs
+from configs import Config
 
 def usernameValid(username):
     rcd = dbse.query(User).filter(User.name == username).first()
@@ -257,7 +254,7 @@ def uploadphoto():
 
     filename = 'photo_{:0>5d}.png'.format(int(userid))
     try:
-        dir = configs.PHOTODIR
+        dir = Config.PHOTODIR
         photo.save(dir + filename)
     except Exception as err:
         return make_response(code=1, msg='save photo error: {}'.form(err))

@@ -1,11 +1,14 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 '''
-    @Author: Lingyu
-    @Date: 2021-10-15 08:39:22
-    @LastEditTime: 2021-10-15 10:43:05
+@Author: Lingyu
+@Date: 2021-10-19
+@Description: 
 '''
 
 from .db import db, dbse
 
-from . import users
+from .users import *
+
+
+def init_app(app):
+    db.init_app(app)

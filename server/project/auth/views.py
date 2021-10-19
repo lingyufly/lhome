@@ -1,20 +1,16 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 '''
-    @Author: Lingyu
-    @Date: 2021-01-05 18:12:56
-    @LastEditTime: 2021-10-15 15:52:28
+@Author: Lingyu
+@Date: 2021-10-19
+@Description: 
 '''
 
 from functools import wraps
 from logging import log
 from flask import g
-from flask.globals import request
-from sqlalchemy.util.langhelpers import repr_tuple_names
 
-from . import mauth
-from models.users import *
-from models import dbse
+from models import dbse, User, Group
+from .base import mauth
 from utils.token import verify_token, create_token
 from utils import make_response, logger
 
@@ -65,7 +61,7 @@ def login():
     if username is None or password is None:
         return make_response(code=1, msg='用户名或密码非法')
 
-    res = User.query.filter_by(name=username).first()
+    res = dbse.query(User).filter(User.name == username).first()
 
     if res is None:
         return make_response(code=1, msg='用户不存在') 

@@ -1,11 +1,9 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 '''
-    @Author: Lingyu
-    @Date: 2021-10-15 08:39:22
-    @LastEditTime: 2021-10-15 17:27:40
+@Author: Lingyu
+@Date: 2021-10-19
+@Description: 
 '''
-
 
 from flask_script import Manager, Server
 from flask_migrate import Migrate, MigrateCommand

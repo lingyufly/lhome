@@ -1,12 +1,9 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 '''
-    @Author: Lingyu
-    @Date: 2021-10-15 08:39:22
-    @LastEditTime: 2021-10-15 17:31:28
+@Author: Lingyu
+@Date: 2021-10-19
+@Description: 
 '''
-
-from jinja2.utils import F
 
 
 def create_app():
@@ -16,25 +13,20 @@ def create_app():
     from flask_cors import CORS
     CORS(app, support_credentials=True)
 
-    import configs
-    app.config.from_object(configs)
+    from configs import Config
+    app.config.from_object(Config)
 
-    from utils.hook import hook_init
-    hook_init(app)
-    
-    from models import db
-    db.init_app(app)
-
-    from user import user
-    app.register_blueprint(user, url_prefix='/user')
-    from auth import mauth
-    app.register_blueprint(mauth, url_prefix='/auth')
+    import utils, models, user, auth
+    utils.init_app(app)
+    models.init_app(app)
+    user.init_app(app)
+    auth.init_app(app)
 
     return app
 
 
 if __name__=='__main__':
     app=create_app()
-    import configs
-    app.run(port=configs.PORT)
+    from configs import Config
+    app.run(port=Config.PORT)
 

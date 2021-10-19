@@ -1,31 +1,63 @@
-#!/usr/bin/env python
 # -*- coding: utf-8 -*-
 '''
-    @Author: Lingyu
-    @Date: 2021-01-05 18:12:56
-    @LastEditTime: 2021-10-15 17:33:15
+@Author: Lingyu
+@Date: 2021-10-19
+@Description: 
 '''
 
-# 数据库地址
-DB_URI = "sqlite:///sqlite.db"
+import os
+from datetime import timedelta
 
-# sqlalchemy 配置
-SQLALCHEMY_DATABASE_URI = DB_URI
-SQLALCHEMY_TRACK_MODIFICATIONS = False
-SQLALCHEMY_ECHO = False
 
-# 密钥
-# SECRET_KEY = os.urandom(24)
-SECRET_KEY = '1234567890'
-EXPIRES_IN=3600
-# session过期时间
-#PERMANENT_SESSION_LIFETIME = timedelta(days=7)
+class DevConfig(object):
+    '''
+    调试模式下的配置文件
+    '''
+    # 调试模式
+    DEBUG = True
 
-# 调试模式
-DEBUG = True
+    # 日志级别
+    LOG_LEVEL = "DEBUG"
 
-# 用户头像存储地址
-PHOTODIR = 'static/'
+    # SQLALCHEMY 配置
+    # 数据库地址
+    SQLALCHEMY_DATABASE_URI = "sqlite:///sqlite.db"
+    # 动态追踪
+    SQLALCHEMY_TRACK_MODIFICATIONS = False
+    # 是否显示原始SQL语句
+    SQLALCHEMY_ECHO = True
+    # 数据库连接池大小
+    # SQLALCHEMY_POOL_SIZE = 10
+    # 数据库连接池超时时间
+    # SQLALCHEMY_POOL_TIMEOUT = 10
+    # 连接池达到最大值后可以创建的连接数
+    # SQLALCHEMY_MAX_OVERFLOW = 2
 
-# 监听端口
-PORT=5000
+    # 密钥
+    SECRET_KEY = '1234567890'
+    EXPIRES_IN = 3600
+
+    # session过期时间
+    PERMANENT_SESSION_LIFETIME = timedelta(days=7)
+
+    # 静态资源（上传、下载）存储地址
+    STATIC_DIR = "static/"
+    PHOTODIR = STATIC_DIR + '/photo/'
+
+    # 监听端口
+    PORT = 5000
+
+
+class PropConfig(DevConfig):
+    '''
+    部署模式配置文件
+    '''
+    DEBUG = False
+    LOG_LEVEL = "INFO"
+    SQLALCHEMY_ECHO = False
+    SECRET_KEY = os.urandom(24)
+    PERMANENT_SESSION_LIFETIME = timedelta(days=7)
+    PORT = 8000
+
+
+Config = PropConfig
