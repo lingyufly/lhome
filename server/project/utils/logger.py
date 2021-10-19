@@ -6,10 +6,21 @@
 '''
 
 import logging
-
+import logging.config
 from configs import Config
+from os import path
 
-logging.basicConfig(level=Config.LOG_LEVEL,
-    format='%(asctime)s - [%(filename)s:%(lineno)d] - %(levelname)s: %(message)s')
-    
-logger=logging.getLogger()
+log_file_path = path.join(path.dirname(path.abspath(__file__)), '../logger.conf')
+logging.config.fileConfig(log_file_path)
+
+def getLogger(lname=None):
+    _logger=None
+    if lname:
+        _logger=logging.getLogger(lname)
+    elif Config.LOGGER:
+        _logger= logging.getLogger(Config.LOGGER)
+    else:
+        _logger= logging.getLogger("root")
+    return _logger
+
+logger=getLogger()

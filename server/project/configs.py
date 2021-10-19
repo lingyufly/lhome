@@ -16,8 +16,8 @@ class DevConfig(object):
     # 调试模式
     DEBUG = True
 
-    # 日志级别
-    LOG_LEVEL = "DEBUG"
+    # 日志
+    LOGGER = "app"
 
     # SQLALCHEMY 配置
     # 数据库地址
@@ -53,7 +53,6 @@ class PropConfig(DevConfig):
     部署模式配置文件
     '''
     DEBUG = False
-    LOG_LEVEL = "INFO"
     SQLALCHEMY_ECHO = False
     SECRET_KEY = os.urandom(24)
     PERMANENT_SESSION_LIFETIME = timedelta(days=7)

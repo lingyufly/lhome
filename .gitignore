@@ -3,3 +3,4 @@ instance
 .vscode
 sqlite.db
 migrations
+log

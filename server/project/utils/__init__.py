@@ -5,7 +5,7 @@
 @Description: 
 '''
 
-from .logger import logger
+from .logger import logger,getLogger
 from .makeresponse import make_response
 from . import hook
 
