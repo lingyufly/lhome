@@ -1,0 +1,9 @@
+<RCC>
+    <qresource prefix="/">
+        <file>qml/main.qml</file>
+        <file>js/ajax.js</file>
+        <file>qml/LoginPage.qml</file>
+        <file>qml/MainPage.qml</file>
+    </qresource>
+    <qresource prefix="/qml"/>
+</RCC>
