@@ -14,6 +14,7 @@ class DevConfig(object):
     调试模式下的配置文件
     '''
     # 调试模式
+    ENV="development"
     DEBUG = True
 
     # 日志
@@ -46,12 +47,14 @@ class DevConfig(object):
 
     # 监听端口
     PORT = 5000
+    SERVER_NAME="0.0.0.0:8000"
 
 
 class PropConfig(DevConfig):
     '''
     部署模式配置文件
     '''
+    ENV="production"
     DEBUG = False
     SQLALCHEMY_ECHO = False
     SECRET_KEY = os.urandom(24)
@@ -59,4 +62,5 @@ class PropConfig(DevConfig):
     PORT = 8000
 
 
-Config = PropConfig
+# Config = PropConfig
+Config=DevConfig
