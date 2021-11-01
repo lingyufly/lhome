@@ -10,9 +10,13 @@ Window {
     visible: true
     title: qsTr("家庭账本")
 
-        LoginPage{
-            anchors.fill: parent
-        }
+    ToastManager{
+        id:mToast
+    }
+
+    LoginPage{
+        anchors.fill: parent
+    }
 
 
 }

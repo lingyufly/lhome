@@ -28,6 +28,9 @@ public:
     explicit CAjax(QObject *parent=0);
     virtual ~CAjax();
 
+    Q_INVOKABLE static void setServerUrl(QString url);
+    Q_INVOKABLE static void setTimeout(int iMs);
+
     Q_INVOKABLE void get(QString url, QJSValue jsObj, QJSValue jsCb, QJSValue jsErr);
     Q_INVOKABLE void post(QString url, QJSValue jsObj, QJSValue jsCb, QJSValue jsErr);
 
@@ -37,6 +40,8 @@ protected slots:
 
 private:
     static QNetworkAccessManager s_qNetworkManager;
+    static QString s_qServerUrl;
+    static int s_iTimeoutMs;
 };
 
 

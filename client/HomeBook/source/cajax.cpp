@@ -13,6 +13,10 @@
 
 QNetworkAccessManager CAjax::s_qNetworkManager;
 
+QString CAjax::s_qServerUrl;
+
+int CAjax::s_iTimeoutMs;
+
 QReplyTimeout::QReplyTimeout(QNetworkReply *parent,int timeout) : QObject(parent)
 {
     // 使用方法 QReplyTimeout * pTimeout = new QReplyTimeout(pReply, 3000);
@@ -48,8 +52,22 @@ CAjax::~CAjax()
 
 }
 
+void CAjax::setServerUrl(QString url)
+{
+    s_qServerUrl=url;
+}
+
+void CAjax::setTimeout(int iMs)
+{
+    s_iTimeoutMs=iMs;
+}
+
 void CAjax::get(QString url, QJSValue jsObj, QJSValue jsCb, QJSValue jsErr)
 {
+    if (url.startsWith("/"))
+    {
+        url=s_qServerUrl+url;
+    }
     QVariant var=jsObj.toVariant();
     QJsonDocument doc = QJsonDocument::fromVariant(var);
     QJsonObject obj=doc.object();
@@ -68,7 +86,7 @@ void CAjax::get(QString url, QJSValue jsObj, QJSValue jsCb, QJSValue jsErr)
         return;
     }
 
-    QReplyTimeout * pTimeout = new QReplyTimeout(pReply, 3000);
+    QReplyTimeout * pTimeout = new QReplyTimeout(pReply, s_iTimeoutMs);
 
     connect(pReply, &QNetworkReply::finished, [=]()mutable{
         QVariant statusCode = pReply->attribute(QNetworkRequest::HttpStatusCodeAttribute);
@@ -94,6 +112,10 @@ void CAjax::get(QString url, QJSValue jsObj, QJSValue jsCb, QJSValue jsErr)
 
 void CAjax::post(QString url, QJSValue jsObj, QJSValue jsCb, QJSValue jsErr)
 {
+    if (url.startsWith("/"))
+    {
+        url=s_qServerUrl+url;
+    }
     QNetworkRequest request=QNetworkRequest(url);
     request.setRawHeader("Content-Type","application/json");
 
@@ -105,7 +127,7 @@ void CAjax::post(QString url, QJSValue jsObj, QJSValue jsCb, QJSValue jsErr)
         return;
     }
 
-    QReplyTimeout * pTimeout = new QReplyTimeout(pReply, 3000);
+    QReplyTimeout * pTimeout = new QReplyTimeout(pReply, s_iTimeoutMs);
 
     connect(pReply, &QNetworkReply::finished, [=]()mutable{
         QVariant statusCode = pReply->attribute(QNetworkRequest::HttpStatusCodeAttribute);

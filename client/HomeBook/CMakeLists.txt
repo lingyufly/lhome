@@ -28,19 +28,20 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(QT NAMES Qt6 Qt5 COMPONENTS Core Quick REQUIRED)
 find_package(Qt${QT_VERSION_MAJOR} COMPONENTS Core Quick REQUIRED)
 
+set(SRCS source/main.cpp
+    source/cajax.cpp
+    source/csettings.cpp
+    include/cajax.h
+    include/csettings.h
+    qml.qrc)
+
 if(ANDROID)
     add_library(HomeBook SHARED
-      source/main.cpp
-      source/cajax.cpp
-      include/cajax.h
-      qml.qrc
+      ${SRCS}
     )
 else()
     add_executable(HomeBook
-      source/main.cpp
-      source/cajax.cpp
-      include/cajax.h
-      qml.qrc
+      ${SRCS}
     )
 endif()
 

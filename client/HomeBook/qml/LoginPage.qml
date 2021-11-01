@@ -4,26 +4,26 @@ import QtQuick.Controls 2.12
 import "../js/ajax.js" as Ajax
 
 Rectangle {
-
+    id:root
     anchors.centerIn: parent
     color: "gray"
     Column{
         id:column
         anchors.centerIn: parent
-        spacing: 10
-        width: parent.width/2
+        spacing: 5
+        width: parent.width*0.7
         TextField{
-            id: username
+            id: mUserNameTf
             width: parent.width
         }
         TextField{
-            id:password
+            id:mPassWordTf
             width: parent.width
         }
 
         Rectangle{
             width: parent.width
-            height:password.height
+            height:mPassWordTf.height
             CheckBox{
                 text:"记住密码"
             }
@@ -35,39 +35,28 @@ Rectangle {
 
         Rectangle{
             width: parent.width
-            height:password.height
+            height:mPassWordTf.height
             Button{
-                id:sighnBtn
-                width: parent.width/2
+                id:mSighnInBtn
                 text:"注册"
                 onClicked: {
-                    var unm=username.text
-                    var pwd=password.text
-                    Ajax.post("http://127.0.0.1:8000/user/registeruser",
-                              {"username":unm, "password":pwd},
-                              function(res){
-                                console.log(res)
-                              },
-                              function(res){
-                                console.log(res)
-                              });
+                    Qt.createComponent("RegistryPage.qml").createObject(root)
                 }
             }
             Button{
-                id:loginBtn
-                width: parent.width/2
+                id:mLoginBtn
                 anchors.right:parent.right
                 text:"登录"
                 onClicked: {
-                    var unm=username.text
-                    var pwd=password.text
-                    Ajax.post("http://127.0.0.1:8000/auth/login",
+                    var unm=mUserNameTf.text
+                    var pwd=mPassWordTf.text
+                    Ajax.post("/auth/login",
                               {"username":unm, "password":pwd},
                               function(res){
-                                console.log(res)
+                                  mToast.show("错误:"+res.msg);
                               },
                               function(res){
-                                console.log(res)
+                                  mToast.show("错误:"+res.msg);
                               });
                 }
             }
@@ -76,6 +65,10 @@ Rectangle {
         Button{
             width: parent.width
             text:"服务器地址"
+            onClicked: {
+                Qt.createComponent("ServerUrlPage.qml").createObject(root)
+            }
         }
+
     }
 }

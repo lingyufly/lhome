@@ -4,6 +4,10 @@
         <file>js/ajax.js</file>
         <file>qml/LoginPage.qml</file>
         <file>qml/MainPage.qml</file>
+        <file>qml/ServerUrlPage.qml</file>
+        <file>qml/RegistryPage.qml</file>
+        <file>qml/Toast.qml</file>
+        <file>qml/ToastManager.qml</file>
     </qresource>
     <qresource prefix="/qml"/>
 </RCC>

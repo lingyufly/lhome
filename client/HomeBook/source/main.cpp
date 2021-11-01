@@ -1,6 +1,8 @@
 #include <QGuiApplication>
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
+
+#include "csettings.h"
 #include "cajax.h"
 
 int main(int argc, char *argv[])
@@ -9,11 +11,15 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
 
-    CAjax cajax;
-
     QQmlApplicationEngine engine;
 
-    engine.rootContext()->setContextProperty("cajax", &cajax);
+    CSettings cSetting("homebook.ini", QSettings::IniFormat);
+    engine.rootContext()->setContextProperty("cSetting", &cSetting);
+
+    CAjax cajax;
+    cajax.setServerUrl(cSetting.value("server/url").toString());
+    cajax.setTimeout(cSetting.value("server/timeout", 3000).toInt());
+    engine.rootContext()->setContextProperty("cAjax", &cajax);
 
     const QUrl url(QStringLiteral("qrc:/qml/main.qml"));
     QObject::connect(&engine, &QQmlApplicationEngine::objectCreated,

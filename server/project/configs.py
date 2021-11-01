@@ -47,7 +47,7 @@ class DevConfig(object):
 
     # 监听端口
     PORT = 5000
-    SERVER_NAME="0.0.0.0:8000"
+    #SERVER_NAME="0.0.0.0:5000"
 
 
 class PropConfig(DevConfig):
