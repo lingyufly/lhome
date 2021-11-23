@@ -10,6 +10,10 @@ from flask.globals import request
 from utils import make_response, logger
 
 def init_app(app):
+    @app.before_first_request
+    def before_first_request():
+        pass
+
     @app.before_request
     def before_request():
         # 解析token
@@ -34,3 +38,11 @@ def init_app(app):
         if request.json:
             data.update(request.json)
         g.args=data
+
+    @app.after_request
+    def after_request(response):
+        return response
+
+    @app.teardown_request
+    def teardown_request(response):
+        return response
