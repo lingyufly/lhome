@@ -356,7 +356,6 @@ def registergroup():
     ### 请求
     | 字段 | 字段类型 | 可选/必选 | 字段描述 |
     | groupname | string | M | 组名 |
-    | description | string | M | 描述 |
 
     ### 返回
     | 字段 | 字段类型 | 字段描述 |
@@ -368,14 +367,12 @@ def registergroup():
     args = g.args
 
     groupname = args.get('groupname', None)
-    description = args.get('description', None)
 
     if not groupname:
         return make_response(code=1, msg='groupname is none')
 
     groupRcd = Group()
     groupRcd.name = groupname
-    groupRcd.description = description
 
     groupRcd.users=[dbse.query(User).filter(User.id == userid).first()]
 
@@ -452,8 +449,6 @@ def modifygroup():
 
     if args.get('groupname', None):
         groupRcd.name = args.get('groupname', None)
-    if args.get('description', None):
-        groupRcd.description = args.get('description', None)
 
     try:
         dbse.commit()

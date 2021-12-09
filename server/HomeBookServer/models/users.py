@@ -22,15 +22,15 @@ class User(Base):
     '''
     __tablename__ = 'user_tab'
     id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(length=20), unique=True, nullable=False)
-    password = Column(String(length=255), nullable=False)
-    photo = Column(String(length=255), nullable=True)
+    name = Column(String(length=32), unique=True, nullable=False)
+    password = Column(String(length=128), nullable=False)
+    photo = Column(String(length=128), nullable=True)
     createdate = Column(DateTime,
                         nullable=False,
                         default=datetime.datetime.now())
     gender = Column(Integer, default=0)
     birthday = Column(DateTime, default=datetime.datetime.now())
-    email = Column(String(length=255))
+    email = Column(String(length=128))
     mobile = Column(String(length=11))
 
     # groups = relationship('Group', secondary=user_group, backref='users')
@@ -46,12 +46,11 @@ class Group(Base):
     '''
     __tablename__ = 'group_tab'
     id = Column(Integer, primary_key=True, autoincrement=True)
-    name = Column(String(length=20), nullable=False)
-    description = Column(String(length=255), nullable=False)
+    name = Column(String(length=32), unique=True, nullable=False)
     createdate = Column(DateTime,
                         nullable=False,
                         default=datetime.datetime.now())
-    photo = Column(String(length=255), nullable=True)
+    photo = Column(String(length=128), nullable=True)
 
     users = relationship('User', secondary=user_group, back_populates='groups')
 
