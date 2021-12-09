@@ -25,11 +25,11 @@ class User(Base):
     name = Column(String(length=32), unique=True, nullable=False)
     password = Column(String(length=128), nullable=False)
     photo = Column(String(length=128), nullable=True)
-    createdate = Column(DateTime,
+    createdate = Column(Integer,
                         nullable=False,
                         default=datetime.datetime.now())
     gender = Column(Integer, default=0)
-    birthday = Column(DateTime, default=datetime.datetime.now())
+    birthday = Column(Integer, default=datetime.datetime.now())
     email = Column(String(length=128))
     mobile = Column(String(length=11))
 
@@ -47,7 +47,7 @@ class Group(Base):
     __tablename__ = 'group_tab'
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(length=32), unique=True, nullable=False)
-    createdate = Column(DateTime,
+    createdate = Column(Integer,
                         nullable=False,
                         default=datetime.datetime.now())
     photo = Column(String(length=128), nullable=True)

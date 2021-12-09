@@ -9,6 +9,8 @@ from .db import db, dbse
 
 from .users import *
 
+from .bill import *
+
 
 def init_app(app):
     db.init_app(app)

@@ -15,11 +15,12 @@ def create_app():
     from configs import Config
     app.config.from_object(Config)
 
-    import utils, models, user, auth
+    import utils, models, user, auth,bill
     utils.init_app(app)
     models.init_app(app)
     user.init_app(app)
     auth.init_app(app)
+    bill.init_app(app)
 
     return app
 
