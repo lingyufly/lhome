@@ -12,6 +12,7 @@ from flask import g
 from models import dbse, User, Group
 from .base import mauth
 from utils.token import verify_token, create_token
+from utils.password import hash_password, check_password
 from utils import make_response, logger
 
 # login_required 装饰器
@@ -66,7 +67,7 @@ def login():
     if res is None:
         return make_response(code=1, msg='用户不存在') 
 
-    if res.name == username and res.password == password:
+    if res.name == username and check_password(res.password, password):
         token = create_token({'userid': res.id, 'username': res.name})
         return make_response(code=0, data={'token': token})
     else:

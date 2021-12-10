@@ -64,6 +64,7 @@ class Bill(Base):
     '''
     账单表
     '''
+    __tablename__ = 'bill_tab'
     id = Column(Integer, primary_key=True, autoincrement=True)
     user_id = Column(Integer, ForeignKey('user_tab.id', ondelete='CASCADE'))
     account_id = Column(Integer,

@@ -15,6 +15,8 @@ from models import dbse,User, Group
 from utils import logger, make_response
 from configs import Config
 
+from utils.password import hash_password, check_password
+
 def usernameValid(username):
     rcd = dbse.query(User).filter(User.name == username).first()
     return False if rcd else True
@@ -81,7 +83,7 @@ def registeruser():
 
     userRcd = User()
     userRcd.name = username
-    userRcd.password = password
+    userRcd.password = hash_password(password)
     userRcd.gender = args.get('gender', None)
     userRcd.birthday = args.get('birthday', None)
     userRcd.email = args.get('email', None)
@@ -159,14 +161,14 @@ def modifyuser():
     if not userRcd:
         return make_response(code=1, msg='userid dosen\'t exit')
 
-    if args.get('username', None):
+    if args.get('username', None) and userRcd.name!=args.get('username', None):
         # 更新用户名前先检查用户名是否合法
         if not usernameValid(args.get('username')):
             return make_response(code=1, msg='username is unvalid')
         userRcd.name = args.get('username', None)
 
     if args.get('password', None):
-        userRcd.password = args.get('password')
+        userRcd.password = hash_password(args.get('password'))
 
     if args.get('gender', None):
         userRcd.gender = args.get('gender')

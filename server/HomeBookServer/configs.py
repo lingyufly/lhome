@@ -36,7 +36,7 @@ class DevConfig(object):
 
     # 密钥
     SECRET_KEY = '1234567890'
-    EXPIRES_IN = 3600
+    EXPIRES_IN = 3600*24
 
     # session过期时间
     PERMANENT_SESSION_LIFETIME = timedelta(days=7)
@@ -63,4 +63,4 @@ class PropConfig(DevConfig):
 
 
 # Config = PropConfig
-Config=DevConfig
+Config=PropConfig
