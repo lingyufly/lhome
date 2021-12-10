@@ -16,17 +16,17 @@ user_tab
 
 #### 定义
 
-| 名称       | 描述       | 类型    | 长度 | 值域                                    | 备注 |
-| ---------- | ---------- | ------- | ---- | --------------------------------------- | ---- |
-| id         | 用户id     | integer |      |                                         | pk   |
-| name       | 用户名     | string  | 32   |                                         | uk   |
-| password   | 密码       | string  | 128  |                                         |      |
-| photo      | 头像文件名 | string  | 128  |                                         |      |
-| createdate | 创建时间   | integer |      |                                         |      |
-| gender     | 性别       | integer |      | 0: others <br />1: female <br />2: male |      |
-| birthday   | 生日       | integer |      |                                         |      |
-| email      | 邮箱       | string  | 128  |                                         |      |
-| mobile     | 手机号     | string  | 11   |                                         |      |
+| 名称        | 描述       | 类型    | 长度 | 值域                            | 备注 |
+| ----------- | ---------- | ------- | ---- | ------------------------------- | ---- |
+| id          | 用户id     | integer |      |                                 | pk   |
+| name        | 用户名     | string  | 32   |                                 | uk   |
+| password    | 密码       | string  | 128  |                                 |      |
+| photo       | 头像文件名 | string  | 128  |                                 |      |
+| create_time | 创建时间   | integer |      |                                 |      |
+| gender      | 性别       | integer |      | 0: 未知 <br />1: 男 <br />2: 女 |      |
+| birthday    | 生日       | Date    |      |                                 |      |
+| email       | 邮箱       | string  | 128  |                                 |      |
+| mobile      | 手机号     | string  | 11   |                                 |      |
 
 
 
@@ -38,12 +38,12 @@ group_tab
 
 #### 定义
 
-| 名称       | 描述       | 类型    | 长度 | 值域 | 备注 |
-| ---------- | ---------- | ------- | ---- | ---- | ---- |
-| id         | 组id       | integer |      |      | pk   |
-| name       | 组名称     | string  | 32   |      | uk   |
-| createdate | 创建日期   | integer |      |      |      |
-| photo      | 头像文件名 | string  | 128  |      |      |
+| 名称        | 描述       | 类型    | 长度 | 值域 | 备注 |
+| ----------- | ---------- | ------- | ---- | ---- | ---- |
+| id          | 组id       | integer |      |      | pk   |
+| name        | 组名称     | string  | 32   |      | uk   |
+| create_time | 创建日期   | integer |      |      |      |
+| photo       | 头像文件名 | string  | 128  |      |      |
 
 
 
@@ -90,13 +90,14 @@ account_tab
 
 #### 定义
 
-| 名称    | 描述   | 类型    | 长度 | 值域        | 备注 |
-| ------- | ------ | ------- | ---- | ----------- | ---- |
-| id      | 账户id | integer |      |             | pk   |
-| user_id | 钱包id | integer |      | user_tab.id | fk   |
-| name    | 描述   | string  | 32   |             |      |
-| photo   | 照片   | string  | 128  |             |      |
-| asset   | 资产   | double  |      |             |      |
+| 名称        | 描述     | 类型    | 长度 | 值域        | 备注 |
+| ----------- | -------- | ------- | ---- | ----------- | ---- |
+| id          | 账户id   | integer |      |             | pk   |
+| user_id     | 钱包id   | integer |      | user_tab.id | fk   |
+| name        | 描述     | string  | 32   |             |      |
+| photo       | 照片     | string  | 128  |             |      |
+| asset       | 资产     | double  |      |             |      |
+| create_time | 创建日期 | integer |      |             |      |
 
 
 
@@ -123,23 +124,23 @@ bill_tab
 
 #### 定义
 
-| 名称       | 描述                                 | 类型    | 长度 | 值域                                                         | 备注 |
-| ---------- | ------------------------------------ | ------- | ---- | ------------------------------------------------------------ | ---- |
-| id         | 账单id                               | integer |      |                                                              | pk   |
-| user_id    | 所属钱包id                           | integer |      | user_tab.id                                                  | fk   |
-| account_id | 所属账户                             | integer |      | account_tab.id                                               | fk   |
-| book_id    | 所属账本                             | integer |      | account_book_tab.id                                          | fk   |
-| time       | 时间                                 | integer |      |                                                              |      |
-| bill_type  | 账单类型                             | integer |      | 0: 收入<br />1: 支出<br />2: 借入<br />3: 借出<br />4: 转入<br />5: 转出<br />6: 自转 |      |
-| category   | 分类                                 | integer |      |                                                              |      |
-| remark     | 类型                                 | integer |      |                                                              |      |
-| amount     | 金额                                 | double  |      |                                                              |      |
-| comment    | 备注信息                             | string  | 128  |                                                              |      |
-| confirm    | 确认标记，转帐、借出、借入完成后确认 | boolean |      |                                                              |      |
-| user1_id   | 对方用户，转帐时使用                 | integer |      | user_tab.id                                                  | fk   |
-| user2_id   | 其他用户                             | integer |      | user_tab.id                                                  | fk   |
-| asset1     | 其他金额，收款金额                   | double  |      |                                                              |      |
-| asset2     | 其他金额                             | double  |      |                                                              |      |
+| 名称        | 描述                                 | 类型    | 长度 | 值域                                                         | 备注 |
+| ----------- | ------------------------------------ | ------- | ---- | ------------------------------------------------------------ | ---- |
+| id          | 账单id                               | integer |      |                                                              | pk   |
+| user_id     | 所属钱包id                           | integer |      | user_tab.id                                                  | fk   |
+| account_id  | 所属账户                             | integer |      | account_tab.id                                               | fk   |
+| book_id     | 所属账本                             | integer |      | account_book_tab.id                                          | fk   |
+| create_time | 时间                                 | integer |      |                                                              |      |
+| bill_type   | 账单类型                             | integer |      | 0: 收入<br />1: 支出<br />2: 借入<br />3: 借出<br />4: 转入<br />5: 转出<br />6: 自转 |      |
+| category    | 分类                                 | integer |      |                                                              |      |
+| remark      | 类型                                 | integer |      |                                                              |      |
+| amount      | 金额                                 | double  |      |                                                              |      |
+| comment     | 备注信息                             | string  | 128  |                                                              |      |
+| confirm     | 确认标记，转帐、借出、借入完成后确认 | boolean |      |                                                              |      |
+| user1_id    | 对方用户，转帐时使用                 | integer |      | user_tab.id                                                  | fk   |
+| user2_id    | 其他用户                             | integer |      | user_tab.id                                                  | fk   |
+| asset1      | 其他金额，收款金额                   | double  |      |                                                              |      |
+| asset2      | 其他金额                             | double  |      |                                                              |      |
 
 
 

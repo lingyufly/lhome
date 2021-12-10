@@ -6,15 +6,22 @@
 '''
 
 from sqlalchemy.orm import relationship
+from sqlalchemy.sql.sqltypes import Date
 from .db import Base
 import datetime
 from sqlalchemy import Table, Column, Integer, String, DateTime, ForeignKey
 
 user_group = Table(
-    'user_group_tab',
-    Base.metadata,
-    Column('user_id', Integer, ForeignKey('user_tab.id', ondelete='CASCADE'), primary_key=True),
-    Column('group_id', Integer, ForeignKey('group_tab.id', ondelete='CASCADE'), primary_key=True))
+    'user_group_tab', Base.metadata,
+    Column('user_id',
+           Integer,
+           ForeignKey('user_tab.id', ondelete='CASCADE'),
+           primary_key=True),
+    Column('group_id',
+           Integer,
+           ForeignKey('group_tab.id', ondelete='CASCADE'),
+           primary_key=True))
+
 
 class User(Base):
     '''
@@ -25,16 +32,18 @@ class User(Base):
     name = Column(String(length=32), unique=True, nullable=False)
     password = Column(String(length=128), nullable=False)
     photo = Column(String(length=128), nullable=True)
-    createdate = Column(Integer,
+    create_time = Column(Integer,
                         nullable=False,
-                        default=datetime.datetime.now())
+                        default=int(datetime.datetime.now().timestamp()))
     gender = Column(Integer, default=0)
-    birthday = Column(Integer, default=datetime.datetime.now())
+    birthday = Column(Date, default=datetime.datetime.now().date())
     email = Column(String(length=128))
     mobile = Column(String(length=11))
 
     # groups = relationship('Group', secondary=user_group, backref='users')
-    groups = relationship('Group', secondary=user_group, back_populates='users')
+    groups = relationship('Group',
+                          secondary=user_group,
+                          back_populates='users')
 
     def to_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
@@ -47,13 +56,12 @@ class Group(Base):
     __tablename__ = 'group_tab'
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(length=32), unique=True, nullable=False)
-    createdate = Column(Integer,
+    create_time = Column(Integer,
                         nullable=False,
-                        default=datetime.datetime.now())
+                        default=int(datetime.datetime.now().timestamp()))
     photo = Column(String(length=128), nullable=True)
 
     users = relationship('User', secondary=user_group, back_populates='groups')
 
     def to_dict(self):
         return {c.name: getattr(self, c.name) for c in self.__table__.columns}
-
