@@ -2,15 +2,14 @@
 '''
 @Author: Lingyu
 @Date: 2021-12-09
-@Description: 账单-wallet部分接口
+@Description: 钱包接口
 '''
 
 from flask import request, g
 from .base import bill
-from auth.views import login_required, userisgroupadmin
-from models import dbse,User, Group,Account, AccountBook,Bill,Wallet
-from utils import logger, make_response
-from configs import Config
+from auth.wrapper import login_required, admin_required
+from models import dbse, Wallet
+from utils.makeresponse import make_ok_response, make_err_response, make_sqlerr_response
 
 
 @bill.route('createwallet', methods=[
@@ -33,16 +32,16 @@ def createwallet():
     '''
     # 判断是不是已经存在该钱包
     if dbse.query(Wallet).filter(Wallet.id == g.userid).first():
-        return make_response(code=1, msg='钱包已经存在!')
+        return make_err_response('钱包已经存在!')
 
-    rcd=Wallet()
-    rcd.id=g.userid
+    rcd = Wallet()
+    rcd.id = g.userid
     try:
         dbse.add(rcd)
         dbse.commit()
     except Exception as err:
-        return make_response(code=1, msg='执行SQL失败: {}'.format(err))
-    return make_response(code=0, data={})
+        return make_sqlerr_response(err)
+    return make_ok_response()
 
 
 @bill.route('deletewallet', methods=[
@@ -64,16 +63,16 @@ def deletewallet():
     @@@
     '''
     # 判断是不是已经存在该钱包
-    rcd=dbse.query(Wallet).filter(Wallet.id == g.userid).first()
+    rcd = dbse.query(Wallet).filter(Wallet.id == g.userid).first()
     if not rcd:
-        return make_response(code=1, msg='钱包不存在!')
+        return make_err_response('钱包不存在!')
 
     try:
         dbse.delete(rcd)
         dbse.commit()
     except Exception as err:
-        return make_response(code=1, msg='执行SQL失败: {}'.format(err))
-    return make_response(code=0, data={})
+        return make_sqlerr_response(err)
+    return make_ok_response()
 
 
 @bill.route('getwalletinfo', methods=[
@@ -95,10 +94,8 @@ def getwalletinfo():
     @@@
     '''
 
-    rcd=dbse.query(Wallet).filter(Wallet.id == g.userid).first()
+    rcd = dbse.query(Wallet).filter(Wallet.id == g.userid).first()
     if not rcd:
-        return make_response(code=1, msg='钱包不存在!')
-    
-    return make_response(data=rcd.to_dict())
+        return make_err_response('钱包不存在!')
 
-    
+    return make_ok_response(rcd.to_dict())

@@ -6,7 +6,8 @@
 '''
 
 from .base import user
-from .views import *
+from .user import *
+from .group import *
 
 def init_app(app, prefix="/user"):
     app.register_blueprint(user, url_prefix=prefix)

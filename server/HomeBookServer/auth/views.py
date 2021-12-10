@@ -11,33 +11,10 @@ from flask import g
 
 from models import dbse, User, Group
 from .base import mauth
-from utils.token import verify_token, create_token
-from utils.password import hash_password, check_password
-from utils import make_response, logger
-
-# login_required 装饰器
-def login_required(func):
-    '''装饰器，解析token数据，判断当前请求是否合法
-    '''
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        if not g.token or not g.userid:
-            return make_response(code=1, msg='请先登录')
-        return func(*args, **kwargs)
-
-    return wrapper
-
-
-def userisgroupadmin(func):
-    '''装饰器，判断当前登陆用户是否是组的管理员，
-
-    该装饰器必须在login_required之后使用
-    '''
-    @wraps(func)
-    def wrapper(*args, **kwargs):
-        return func(*args, **kwargs)
-
-    return wrapper
+from utils.token import create_token
+from utils.password import check_password
+from utils.makeresponse import make_ok_response, make_err_response, make_sqlerr_response
+from .wrapper import login_required
 
 
 @mauth.route('login', methods=['POST', 'GET'])
@@ -60,18 +37,18 @@ def login():
     username = g.args.get('username', None)
     password = g.args.get('password', None)
     if username is None or password is None:
-        return make_response(code=1, msg='用户名或密码非法')
+        return make_err_response('用户名或密码非法')
 
     res = dbse.query(User).filter(User.name == username).first()
 
     if res is None:
-        return make_response(code=1, msg='用户不存在') 
+        return make_err_response('用户不存在')
 
     if res.name == username and check_password(res.password, password):
         token = create_token({'userid': res.id, 'username': res.name})
-        return make_response(code=0, data={'token': token})
+        return make_ok_response({'token': token})
     else:
-        return make_response(code=1, msg='用户名或密码错误')
+        return make_err_response('用户名或密码错误')
 
 
 @mauth.route('logout', methods=[
@@ -94,5 +71,5 @@ def logout():
     '''
     userid = g.userid
     if userid is None:
-        return make_response(code=1, msg='用户名为空')
-    return make_response(code=0, data={})
+        return make_err_response('用户名为空')
+    return make_ok_response()

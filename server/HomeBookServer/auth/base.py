@@ -6,4 +6,5 @@
 '''
 
 from flask import Blueprint
+
 mauth = Blueprint('mauth', __name__)

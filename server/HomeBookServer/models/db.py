@@ -8,5 +8,10 @@
 from flask_sqlalchemy import SQLAlchemy
 
 db: SQLAlchemy = SQLAlchemy()
-Base=db.Model
 dbse = db.session
+Base=db.Model
+
+def to_dict(self):
+    return {c.name: getattr(self, c.name) for c in self.__table__.columns}
+    
+Base.to_dict=to_dict

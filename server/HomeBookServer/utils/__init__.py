@@ -5,9 +5,6 @@
 @Description: 
 '''
 
-from .logger import logger,getLogger
-from .makeresponse import make_response
-from . import hook
-
 def init_app(app):
+    from . import hook
     hook.init_app(app)

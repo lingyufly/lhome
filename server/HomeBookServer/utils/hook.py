@@ -7,7 +7,7 @@
 from utils.token import *
 from flask import g
 from flask.globals import request
-from utils import make_response, logger
+from utils.makeresponse import make_err_response
 
 def init_app(app):
     @app.before_first_request
@@ -27,7 +27,7 @@ def init_app(app):
                     g.userid=g.token.get('userid')
             
         except Exception as err:
-            return make_response(code=1, msg='解析token失败 {}'.format(err))
+            return make_err_response('解析token失败 {}'.format(err))
 
         # 解析传入参数
         data={}

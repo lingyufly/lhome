@@ -8,7 +8,7 @@
 from sqlalchemy.orm import relationship
 from .db import Base
 import datetime
-from sqlalchemy import Table, Column, Integer, Float, String, DateTime, ForeignKey
+from sqlalchemy import Column, Integer, Float, String, ForeignKey
 
 
 class Wallet(Base):
@@ -23,9 +23,6 @@ class Wallet(Base):
     debt = Column(Float, nullable=False, default=0.0)
     lend = Column(Float, nullable=False, default=0.0)
     borrow = Column(Float, nullable=False, default=0.0)
-
-    def to_dict(self):
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
 class Account(Base):
@@ -42,9 +39,6 @@ class Account(Base):
                          nullable=False,
                          default=int(datetime.datetime.now().timestamp()))
 
-    def to_dict(self):
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
-
 
 class AccountBook(Base):
     '''
@@ -55,9 +49,6 @@ class AccountBook(Base):
                 ForeignKey('group_tab.id', ondelete='CASCADE'),
                 primary_key=True)
     category = Column(String(length=1024), nullable=False)
-
-    def to_dict(self):
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
 
 
 class Bill(Base):
@@ -78,6 +69,3 @@ class Bill(Base):
     remark = Column(Integer)
     amount = Column(Float, nullable=False)
     comment = Column(String(length=128), default='')
-
-    def to_dict(self):
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns}

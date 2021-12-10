@@ -9,7 +9,7 @@ from sqlalchemy.orm import relationship
 from sqlalchemy.sql.sqltypes import Date
 from .db import Base
 import datetime
-from sqlalchemy import Table, Column, Integer, String, DateTime, ForeignKey
+from sqlalchemy import Table, Column, Integer, String, ForeignKey
 
 user_group = Table(
     'user_group_tab', Base.metadata,
@@ -33,8 +33,8 @@ class User(Base):
     password = Column(String(length=128), nullable=False)
     photo = Column(String(length=128), nullable=True)
     create_time = Column(Integer,
-                        nullable=False,
-                        default=int(datetime.datetime.now().timestamp()))
+                         nullable=False,
+                         default=int(datetime.datetime.now().timestamp()))
     gender = Column(Integer, default=0)
     birthday = Column(Date, default=datetime.datetime.now().date())
     email = Column(String(length=128))
@@ -45,9 +45,6 @@ class User(Base):
                           secondary=user_group,
                           back_populates='users')
 
-    def to_dict(self):
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns}
-
 
 class Group(Base):
     '''
@@ -57,11 +54,8 @@ class Group(Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     name = Column(String(length=32), unique=True, nullable=False)
     create_time = Column(Integer,
-                        nullable=False,
-                        default=int(datetime.datetime.now().timestamp()))
+                         nullable=False,
+                         default=int(datetime.datetime.now().timestamp()))
     photo = Column(String(length=128), nullable=True)
 
     users = relationship('User', secondary=user_group, back_populates='groups')
-
-    def to_dict(self):
-        return {c.name: getattr(self, c.name) for c in self.__table__.columns}

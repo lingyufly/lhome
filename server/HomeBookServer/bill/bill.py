@@ -7,9 +7,10 @@
 
 from flask import request, g
 from .base import bill
-from auth.views import login_required, userisgroupadmin
-from models import dbse, User, Group, Account, AccountBook, Bill, Wallet
-from utils import logger, make_response
+from auth.wrapper import login_required, admin_required
+from models import dbse, Bill
+from utils.makeresponse import make_ok_response, make_err_response, make_sqlerr_response
+
 
 @bill.route('newbill', methods=[
     'POST',
@@ -59,15 +60,15 @@ def newbill():
         or rcd.remark is None \
         or rcd.amount is None \
         or rcd.comment is None:
-        return make_response(code=1, msg='提交数据错误!')
+        return make_err_response('提交数据错误!')
 
     try:
         dbse.add(rcd)
         dbse.commit()
     except Exception as err:
-        return make_response(code=1, msg='执行SQL失败: {}'.format(err))
+        return make_sqlerr_response(err)
 
-    return make_response()
+    return make_ok_response()
 
 
 @bill.route('deletebill', methods=[
@@ -92,21 +93,21 @@ def deletebill():
 
     id = g.args.get('id')
     if id is None:
-        return make_response(code=1, msg='账单id不能为空!')
+        return make_err_response('账单id不能为空!')
 
     rcd = dbse.query(Bill).filter(Bill.user_id == g.userid).filter(
         Bill.id == id).first()
 
     if not rcd:
-        return make_response(code=1, msg='查询不到指定账单!')
+        return make_err_response('查询不到指定账单!')
 
     try:
         dbse.delete(rcd)
         dbse.commit()
     except Exception as err:
-        return make_response(code=1, msg='执行SQL失败: {}'.format(err))
+        return make_sqlerr_response(err)
 
-    return make_response()
+    return make_ok_response()
 
 
 @bill.route('modifybill', methods=[
@@ -136,13 +137,13 @@ def modifybill():
     args = g.args
     id = args.get('id')
     if id is None:
-        return make_response(code=1, msg='账单id不能为空!')
+        return make_err_response('账单id不能为空!')
 
     rcd = dbse.query(Bill).filter(Bill.user_id == g.userid).filter(
         Bill.id == id).first()
 
     if not rcd:
-        return make_response(code=1, msg='查询不到指定账单!')
+        return make_err_response('查询不到指定账单!')
 
     if args.get('create_time'):
         rcd.create_time = args.get('create_time')
@@ -156,9 +157,9 @@ def modifybill():
     try:
         dbse.commit()
     except Exception as err:
-        return make_response(code=1, msg='执行SQL失败: {}'.format(err))
+        return make_sqlerr_response(err)
 
-    return make_response()
+    return make_ok_response()
 
 
 @bill.route('querybill', methods=[
@@ -213,16 +214,19 @@ def querybill():
 
     if args.get('start_time') and args.get('end_time'):
         qry = qry.filter(
-            Bill.create_time.between(args.get('start_time'), args.get('end_time')))
+            Bill.create_time.between(args.get('start_time'),
+                                     args.get('end_time')))
 
     page_index = args.get('page_index', 1)
     page_size = args.get('page_size', 100)
 
     if page_index <= 0 or page_size <= 0 or page_size > 1000:
-        return make_response(code=1, msg='分页信息输入错误!')
+        return make_err_response('分页信息输入错误!')
 
     try:
-        rcds = qry.paginate(page=page_index, per_page=page_size, error_out=True)
+        rcds = qry.paginate(page=page_index,
+                            per_page=page_size,
+                            error_out=True)
         data = {}
         data['has_next'] = rcds.has_next
         data['page_index'] = page_index
@@ -231,6 +235,6 @@ def querybill():
         for r in rcds.items:
             data['data'].append(r.to_dict())
     except Exception as err:
-        return make_response(code=1, msg='执行SQL失败: {}'.format(err))
+        return make_sqlerr_response(err)
 
-    return make_response(data=data)
+    return make_ok_response(data)

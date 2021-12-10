@@ -5,12 +5,11 @@
 @Description: 账本接口
 '''
 
-from flask import request, g
+from flask import g
 from .base import bill
-from auth.views import login_required, userisgroupadmin
-from models import dbse, User, Group, Account, AccountBook, Bill, Wallet
-from utils import logger, make_response, makeresponse
-from configs import Config
+from auth.wrapper import login_required
+from models import dbse, AccountBook
+from utils.makeresponse import make_ok_response, make_err_response, make_sqlerr_response
 
 
 @bill.route('createaccountbook', methods=[
@@ -32,26 +31,26 @@ def createaccountbook():
 
     @@@
     '''
-    
-    id=g.args.get('id')
+
+    id = g.args.get('id')
     if id is None:
-        return make_response(code=1, msg='用户组id不能为空!')
-    
-    rcd=dbse.query(AccountBook).filter(AccountBook.id==id).first()
+        return make_err_response('用户组id不能为空!')
+
+    rcd = dbse.query(AccountBook).filter(AccountBook.id == id).first()
 
     if rcd:
-        return make_response(code=1, msg='该用户组已经存在账本!')
+        return make_err_response('该用户组已经存在账本!')
 
-    rcd=AccountBook()
-    rcd.id=id
-    rcd.category=''
+    rcd = AccountBook()
+    rcd.id = id
+    rcd.category = ''
     try:
         dbse.add(rcd)
         dbse.commit()
     except Exception as err:
-        return make_response(code=1, msg='执行SQL失败: {}'.format(err))
+        return make_sqlerr_response(err)
 
-    return make_response(code=0)
+    return make_ok_response()
 
 
 @bill.route('deleteaccountbook', methods=[
@@ -74,22 +73,22 @@ def deleteaccountbook():
     @@@
     '''
 
-    id=g.args.get('id')
+    id = g.args.get('id')
     if id is None:
-        return make_response(code=1, msg='用户组id不能为空!')
-    
-    rcd=dbse.query(AccountBook).filter(AccountBook.id==id).first()
+        return make_err_response('用户组id不能为空!')
+
+    rcd = dbse.query(AccountBook).filter(AccountBook.id == id).first()
 
     if not rcd:
-        return make_response(code=1, msg='账本不存在!')
+        return make_err_response('账本不存在!')
 
     try:
         dbse.delete(rcd)
         dbse.commit()
     except Exception as err:
-        return make_response(code=1, msg='执行SQL失败: {}'.format(err))
+        return make_sqlerr_response(err)
 
-    return make_response(code=0)
+    return make_ok_response()
 
 
 @bill.route('getaccountbookinfo', methods=[
@@ -112,13 +111,13 @@ def getaccountbookinfo():
     @@@
     '''
 
-    id=g.args.get('id')
+    id = g.args.get('id')
     if id is None:
-        return make_response(code=1, msg='用户组id不能为空!')
-    
-    rcd=dbse.query(AccountBook).filter(AccountBook.id==id).first()
+        return make_err_response('用户组id不能为空!')
+
+    rcd = dbse.query(AccountBook).filter(AccountBook.id == id).first()
 
     if not rcd:
-        return make_response(code=1, msg='账本不存在!')
+        return make_err_response('账本不存在!')
 
-    return make_response(data=rcd.to_dict())
+    return make_ok_response(rcd.to_dict())
