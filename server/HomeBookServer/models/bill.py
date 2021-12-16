@@ -66,6 +66,6 @@ class Bill(Base):
                          default=int(datetime.datetime.now().timestamp()))
     bill_type = Column(Integer)
     category = Column(Integer)
-    remark = Column(Integer)
+    tag = Column(String(length=128), default='')
     amount = Column(Float, nullable=False)
     comment = Column(String(length=128), default='')

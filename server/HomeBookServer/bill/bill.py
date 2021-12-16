@@ -29,7 +29,7 @@ def newbill():
     |create_time|integer|M|发生时间|
     |bill_type|integer|M|账单类型|
     |category|intger|M|分类|
-    |remark|intger|M|类型|
+    |tag|intger|M|标签|
     |amount|double|M|金额|
     |comment|string|O|备注信息|
 
@@ -47,7 +47,7 @@ def newbill():
     rcd.create_time = args.get('create_time')
     rcd.bill_type = args.get('bill_type')
     rcd.category = args.get('category')
-    rcd.remark = args.get('remark')
+    rcd.tag = args.get('tag')
     rcd.amount = args.get('amount')
     rcd.comment = args.get('comment', '')
 
@@ -57,7 +57,7 @@ def newbill():
         or rcd.create_time is None \
         or rcd.bill_type is None \
         or rcd.category is None \
-        or rcd.remark is None \
+        or rcd.tag is None \
         or rcd.amount is None \
         or rcd.comment is None:
         return make_err_response('提交数据错误!')
@@ -125,7 +125,7 @@ def modifybill():
     |id|integer|M|账单id|
     |create_time|integer|O|时间|
     |category|integer|O|分类|
-    |remark|integer|O|类型|
+    |tag|integer|O|标签|
     |comment|string|O|备注|
 
     ### 返回
@@ -149,8 +149,8 @@ def modifybill():
         rcd.create_time = args.get('create_time')
     if args.get('category'):
         rcd.category = args.get('category')
-    if args.get('remark'):
-        rcd.remark = args.get('remark')
+    if args.get('tag'):
+        rcd.tag = args.get('tag')
     if args.get('comment'):
         rcd.comment = args.get('comment')
 
@@ -182,7 +182,7 @@ def querybill():
     |end_time|integer|O|结束时间查询|
     |bill_type|integer|O|账单类型查询|
     |category|integer|O|分类查询|
-    |remark|integer|O|类型查询|
+    |tag|integer|O|标签查询|
     |comment|string|O|备注模糊查询|
     |page_index|string|O|分页号，缺省为1|
     |page_size|string|O|每页记录长度，缺省为100，最大为1000|
@@ -207,10 +207,10 @@ def querybill():
         qry = qry.filter(Bill.bill_type == args.get('bill_type'))
     if args.get('category'):
         qry = qry.filter(Bill.category == args.get('category'))
-    if args.get('remark'):
-        qry = qry.filter(Bill.remark == args.get('remark'))
+    if args.get('tag'):
+        qry = qry.filter(Bill.tag.contains(args.get('tag')))
     if args.get('comment'):
-        qry = qry.filter(Bill.comment.contains(args.get('remark')))
+        qry = qry.filter(Bill.comment.contains(args.get('comment')))
 
     if args.get('start_time') and args.get('end_time'):
         qry = qry.filter(
