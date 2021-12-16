@@ -1,3 +1,11 @@
+/*************************************************************************
+  > File Name:      cajax.h
+  > Author:         ly
+  > Created Time:   Sat 23 Oct 2021 09:43:53 PM CST
+  > Description:    封装的http请求接口
+ ************************************************************************/
+
+
 #ifndef _CAJAX_H_
 #define _CAJAX_H_
 
@@ -31,12 +39,16 @@ public:
     Q_INVOKABLE static void setServerUrl(QString url);
     Q_INVOKABLE static void setTimeout(int iMs);
 
-    Q_INVOKABLE void get(QString url, QJSValue jsObj, QJSValue jsCb, QJSValue jsErr);
-    Q_INVOKABLE void post(QString url, QJSValue jsObj, QJSValue jsCb, QJSValue jsErr);
+    Q_INVOKABLE void get(QString url, QJSValue jsObj, QJSValue jsCb);
+    Q_INVOKABLE void post(QString url, QJSValue jsObj, QJSValue jsCb);
+    Q_INVOKABLE void put(QString url, QJSValue jsObj, QJSValue jsCb);
 
-    Q_INVOKABLE void test(QJSValue jsObj);
+    Q_INVOKABLE void uploadFile(QString url, QJSValue fileObj, QJSValue jsObj, QJSValue jsCb);
 
 protected slots:
+
+protected:
+    void wait(QNetworkReply *pReply, QJSValue jsCb);
 
 private:
     static QNetworkAccessManager s_qNetworkManager;
