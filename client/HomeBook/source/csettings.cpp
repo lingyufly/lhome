@@ -6,6 +6,7 @@
  ************************************************************************/
 
 #include <iostream>
+#include <QDebug>
 
 #include "csettings.h"
 
@@ -49,7 +50,36 @@ void CSettings::setValue(const QString &key, const QVariant &value)
 }
 QVariant CSettings::value(const QString &key, const QVariant &defaultValue) const
 {
-    return QSettings::value(key, defaultValue);
+    QVariant qvar=QSettings::value(key, defaultValue);
+    return qvar;
+}
+
+bool CSettings::getBool(const QString &key, bool defaultValue) const
+{
+    QVariant qvar=QSettings::value(key, defaultValue);
+
+    return qvar.toBool();
+}
+
+int CSettings::getInt(const QString &key, int defaultValue) const
+{
+    QVariant qvar=QSettings::value(key, defaultValue);
+
+    return qvar.toInt();
+}
+
+double CSettings::getDouble(const QString &key, double defaultValue) const
+{
+    QVariant qvar=QSettings::value(key, defaultValue);
+
+    return qvar.toDouble();
+}
+
+QString CSettings::getString(const QString &key, QString defaultValue) const
+{
+    QVariant qvar=QSettings::value(key, defaultValue);
+
+    return qvar.toString();
 }
 
 void CSettings::remove(const QString &key)

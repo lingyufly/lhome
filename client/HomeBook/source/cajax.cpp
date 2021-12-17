@@ -24,12 +24,6 @@
 // 全局的请求管理类
 QNetworkAccessManager CAjax::s_qNetworkManager;
 
-// 全局的请求根地址
-QString CAjax::s_qServerUrl;
-
-// 超时时间 ms
-int CAjax::s_iTimeoutMs;
-
 /**
  * @brief QReplyTimeout::QReplyTimeout http请求超时封装类
  * @param parent
@@ -67,6 +61,9 @@ QReplyTimeout::~QReplyTimeout()
 CAjax::CAjax(QObject *parent)
     :QObject(parent)
 {
+    m_qServerUrl="";
+    m_iTimeoutMs=3000;
+    m_qToken="";
 }
 
 /**
@@ -83,7 +80,7 @@ CAjax::~CAjax()
  */
 void CAjax::setServerUrl(QString url)
 {
-    s_qServerUrl=url;
+    m_qServerUrl=url;
 }
 
 /**
@@ -92,7 +89,16 @@ void CAjax::setServerUrl(QString url)
  */
 void CAjax::setTimeout(int iMs)
 {
-    s_iTimeoutMs=iMs;
+    m_iTimeoutMs=iMs;
+}
+
+/**
+ * @brief CAjax::setToken
+ * @param token
+ */
+void CAjax::setToken(QString token)
+{
+    m_qToken=token;
 }
 
 /**
@@ -105,7 +111,7 @@ void CAjax::get(QString url, QJSValue jsObj, QJSValue jsCb)
 {
     if (url.startsWith("/"))
     {
-        url=s_qServerUrl+url;
+        url=m_qServerUrl+url;
     }
 
     // 遍历请求的参数，组合到url上
@@ -135,10 +141,11 @@ void CAjax::post(QString url, QJSValue jsObj, QJSValue jsCb)
 {
     if (url.startsWith("/"))
     {
-        url=s_qServerUrl+url;
+        url=m_qServerUrl+url;
     }
     QNetworkRequest request=QNetworkRequest(url);
     request.setRawHeader("Content-Type","application/json");
+    request.setRawHeader("token", m_qToken.toLatin1());
 
     QJsonDocument doc = QJsonDocument::fromVariant(jsObj.toVariant());
     QNetworkReply *pReply = s_qNetworkManager.post(request, doc.toJson());
@@ -156,10 +163,11 @@ void CAjax::put(QString url, QJSValue jsObj, QJSValue jsCb)
 {
     if (url.startsWith("/"))
     {
-        url=s_qServerUrl+url;
+        url=m_qServerUrl+url;
     }
     QNetworkRequest request=QNetworkRequest(url);
     request.setRawHeader("Content-Type","application/json");
+    request.setRawHeader("token", m_qToken.toUtf8());
 
     QJsonDocument doc = QJsonDocument::fromVariant(jsObj.toVariant());
     QNetworkReply *pReply = s_qNetworkManager.put(request, doc.toJson());
@@ -178,9 +186,10 @@ void CAjax::uploadFile(QString url, QJSValue fileObj, QJSValue jsObj, QJSValue j
 {
     if (url.startsWith("/"))
     {
-        url=s_qServerUrl+url;
+        url=m_qServerUrl+url;
     }
     QNetworkRequest request=QNetworkRequest(url);
+    request.setRawHeader("token", m_qToken.toUtf8());
 
     QHttpMultiPart *pMultiPart = new QHttpMultiPart(QHttpMultiPart::FormDataType);
 
@@ -231,7 +240,7 @@ void CAjax::uploadFile(QString url, QJSValue fileObj, QJSValue jsObj, QJSValue j
  */
 void CAjax::wait(QNetworkReply *pReply, QJSValue jsCb)
 {
-    QReplyTimeout * pTimeout = new QReplyTimeout(pReply, s_iTimeoutMs);
+    QReplyTimeout * pTimeout = new QReplyTimeout(pReply, m_iTimeoutMs);
     Q_UNUSED(pTimeout);
 
     connect(pReply, &QNetworkReply::finished, [=]()mutable{

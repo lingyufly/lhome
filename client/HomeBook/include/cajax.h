@@ -36,8 +36,9 @@ public:
     explicit CAjax(QObject *parent=0);
     virtual ~CAjax();
 
-    Q_INVOKABLE static void setServerUrl(QString url);
-    Q_INVOKABLE static void setTimeout(int iMs);
+    Q_INVOKABLE void setServerUrl(QString url);
+    Q_INVOKABLE void setTimeout(int iMs);
+    Q_INVOKABLE void setToken(QString token);
 
     Q_INVOKABLE void get(QString url, QJSValue jsObj, QJSValue jsCb);
     Q_INVOKABLE void post(QString url, QJSValue jsObj, QJSValue jsCb);
@@ -52,8 +53,9 @@ protected:
 
 private:
     static QNetworkAccessManager s_qNetworkManager;
-    static QString s_qServerUrl;
-    static int s_iTimeoutMs;
+    QString m_qServerUrl;
+    int m_iTimeoutMs;
+    QString m_qToken;
 };
 
 

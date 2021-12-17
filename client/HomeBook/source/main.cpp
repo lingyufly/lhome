@@ -2,6 +2,8 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 
+#include <QtQuickControls2/QQuickStyle>
+
 #include "csettings.h"
 #include "cajax.h"
 
@@ -11,12 +13,15 @@ int main(int argc, char *argv[])
 
     QGuiApplication app(argc, argv);
 
+    QQuickStyle::setStyle("Material");
+
     QQmlApplicationEngine engine;
 
     CSettings cSetting("homebook.ini", QSettings::IniFormat);
     engine.rootContext()->setContextProperty("cSetting", &cSetting);
 
     CAjax cajax;
+    cajax.setToken("");
     cajax.setServerUrl(cSetting.value("server/url").toString());
     cajax.setTimeout(cSetting.value("server/timeout", 3000).toInt());
     engine.rootContext()->setContextProperty("cAjax", &cajax);

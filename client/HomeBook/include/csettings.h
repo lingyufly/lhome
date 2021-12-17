@@ -22,6 +22,11 @@ public:
     Q_INVOKABLE void setValue(const QString &key, const QVariant &value);
     Q_INVOKABLE QVariant value(const QString &key, const QVariant &defaultValue = QVariant()) const;
 
+    Q_INVOKABLE bool getBool(const QString &key, bool defaultValue=false) const;
+    Q_INVOKABLE int getInt(const QString &key, int defaultValue=0) const;
+    Q_INVOKABLE double getDouble(const QString &key, double defaultValue=0.0) const;
+    Q_INVOKABLE QString getString(const QString &key, QString defaultValue="") const;
+
     Q_INVOKABLE void remove(const QString &key);
     Q_INVOKABLE bool contains(const QString &key) const;
 
