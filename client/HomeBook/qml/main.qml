@@ -15,8 +15,18 @@ Window {
     }
 
     LoginPage{
+        id:mLoginPage
         anchors.fill: parent
     }
 
+    MainPage{
+        id:mMainPage
+        anchors.fill: parent
+        visible: false
+    }
+
+    Component.onCompleted: {
+        cSetting.remove("token");
+    }
 
 }
