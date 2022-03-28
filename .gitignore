@@ -6,3 +6,4 @@ migrations
 log
 Debug
 CMakeLists.txt.user
+.cmake

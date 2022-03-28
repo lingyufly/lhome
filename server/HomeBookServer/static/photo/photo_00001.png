@@ -1,0 +1,93 @@
+{
+BaseAttribute
+    {
+        Name;Name
+				Description;Description	
+				Substation;Of_Substation				
+				Type;Type*MEASTYPE			
+				Save Cycle;Save_Cycle				
+				Is Save;Save_Flag/0x01
+				Is Calculation;Calc_Var_Flag/0x1
+				Is Multi-DataSource;Multi_Src_Flag/0x1
+				Is Integral;Integral_Flag/0x01				
+				Bypass Name;Bypass_Name
+				Bay Name;Of_Bay
+				Integral TM_Name;Integral_TM_Name
+	}
+Value and Quality Identifier
+{
+			Current MI;CurMI
+			Period1 MI;Period1_CurMI
+			Period2 MI;Period2_CurMI
+			Period3 MI;Period3_CurMI
+			Period4 MI;Period4_CurMI
+			Raw_Increase_Value;Raw_Increase_Value
+			Integral_Value;Integral_Value
+			Save_Value;Save_Value
+			Abs_Value;Abs_Value
+			Bypass_Value;Bypass_Value
+			Quality Code
+			{
+				Is Manual Set;Manual_SetData_Flag/0x1
+				Is Bypass;Bypass_Flag/0x1
+				Is RTU Error;RTU_Err_Flag/0x1
+			}
+			Quality Descriptor
+			{
+				OverFlow;QualDes/0x01
+				Locked;QualDes/0x10
+				Substituted;QualDes/0x20
+				Not Topical;QualDes/0x40
+				Invalid;QualDes/0x80
+			}
+	}
+Acquisition Attribute
+	{
+		RTU_No;RTU_No
+		KWh_No;KWh_No
+		Raw_Value;Raw_Value
+		Acquisition Mode;Acquis_Mode*SAMPLETYPE
+		Engineering Attribute
+		{
+			Original_Scale;Original_Scale
+			Scale;Scale			
+			Ratio;Ratio			
+			Period1_Original_Scale;Period1_Original_Scale
+			Period2_Original_Scale;Period2_Original_Scale
+			Period3_Original_Scale;Period3_Original_Scale
+			Period4_Original_Scale;Period4_Original_Scale
+			Period1_Full_Scale;Period1_Full_Scale
+			Period2_Full_Scale;Period1_Full_Scale
+			Period3_Full_Scale;Period1_Full_Scale
+			Period4_Full_Scale;Period1_Full_Scale
+		}			
+	}
+Limit Info
+	{
+			KWh_Max_Increament;KWh_Max_Increament
+			Max_Raw_Value;Max_Raw_Value	
+			Full_Scale;Full_Scale
+	}
+Statistic Info
+	{			
+			Total of day;Accum_Value_D
+			Total of month;Accum_Value_M
+			Total of year;Accum_Value_Y
+			Period_1 Total of day;Period_Accum1_D
+			Period_2 Total of day;Period_Accum2_D
+			Period_3 Total of day;Period_Accum3_D
+			Period_4 Total of day;Period_Accum4_D
+			Period_1 Total of month;Period_Accum1_M
+			Period_2 Total of month;Period_Accum2_M
+			Period_3 Total of month;Period_Accum3_M
+			Period_4 Total of month;Period_Accum4_M
+			Period_1 Total of year;Period_Accum1_Y
+			Period_2 Total of year;Period_Accum2_Y
+			Period_3 Total of year;Period_Accum3_Y
+			Period_4 Total of year;Period_Accum4_Y
+  }
+}
+
+
+
+
