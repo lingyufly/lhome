@@ -6,8 +6,50 @@
         <file>qml/MainPage.qml</file>
         <file>qml/ServerUrlPage.qml</file>
         <file>qml/RegistryPage.qml</file>
-        <file>qml/Toast.qml</file>
-        <file>qml/ToastManager.qml</file>
+        <file>qml/toast/Toast.qml</file>
+        <file>qml/toast/ToastManager.qml</file>
+        <file>qml/BillPage.qml</file>
+        <file>qml/UserInfoPage.qml</file>
+        <file>qml/FamilyInfoPage.qml</file>
+        <file>assets/percent.png</file>
+        <file>assets/rili/rili01.png</file>
+        <file>assets/rili/rili02.png</file>
+        <file>assets/rili/rili03.png</file>
+        <file>assets/rili/rili04.png</file>
+        <file>assets/rili/rili05.png</file>
+        <file>assets/rili/rili06.png</file>
+        <file>assets/rili/rili07.png</file>
+        <file>assets/rili/rili08.png</file>
+        <file>assets/rili/rili09.png</file>
+        <file>assets/rili/rili10.png</file>
+        <file>assets/rili/rili11.png</file>
+        <file>assets/rili/rili12.png</file>
+        <file>assets/rili/rili13.png</file>
+        <file>assets/rili/rili14.png</file>
+        <file>assets/rili/rili15.png</file>
+        <file>assets/rili/rili16.png</file>
+        <file>assets/rili/rili17.png</file>
+        <file>assets/rili/rili18.png</file>
+        <file>assets/rili/rili19.png</file>
+        <file>assets/rili/rili20.png</file>
+        <file>assets/rili/rili21.png</file>
+        <file>assets/rili/rili22.png</file>
+        <file>assets/rili/rili23.png</file>
+        <file>assets/rili/rili24.png</file>
+        <file>assets/rili/rili25.png</file>
+        <file>assets/rili/rili26.png</file>
+        <file>assets/rili/rili27.png</file>
+        <file>assets/rili/rili28.png</file>
+        <file>assets/rili/rili29.png</file>
+        <file>assets/rili/rili30.png</file>
+        <file>assets/rili/rili31.png</file>
+        <file>assets/family.png</file>
+        <file>assets/person.png</file>
+        <file>assets/rili/rili00.png</file>
+        <file>qml/xxx.qml</file>
+        <file>qml/BillRecordItem.qml</file>
+        <file>assets/type/traffic.png</file>
     </qresource>
     <qresource prefix="/qml"/>
+    <qresource prefix="/img"/>
 </RCC>

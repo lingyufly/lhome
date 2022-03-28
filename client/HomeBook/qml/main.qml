@@ -3,6 +3,7 @@ import QtQuick.Window 2.12
 import QtQuick.Controls 2.5
 
 import "../js/ajax.js" as Ajax
+import "./toast"
 
 Window {
     width: 400
@@ -17,12 +18,13 @@ Window {
     LoginPage{
         id:mLoginPage
         anchors.fill: parent
+        visible: false
     }
 
     MainPage{
         id:mMainPage
         anchors.fill: parent
-        visible: false
+
     }
 
     Component.onCompleted: {

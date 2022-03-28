@@ -1,22 +1,39 @@
 import QtQuick 2.0
-
+import QtQuick.Controls 2.3
 Item {
-    Text {
-        id: text1
-        x: 92
-        y: 120
-        text: qsTr("Text")
-        font.pixelSize: 12
+    SwipeView{
+        anchors.fill: parent
+        id:swipeview
+        currentIndex: footer.currentIndex
+        UserInfoPage{
+            id:userInfoPage
+        }
+        BillPage{
+            id:billPage
+        }
+        FamilyInfoPage {
+            id:familyInfoPage
+        }
     }
 
-    TextInput {
-        id: textInput
-        x: 92
-        y: 177
-        width: 80
-        height: 20
-        text: qsTr("Text Input")
-        font.pixelSize: 12
+    TabBar{
+        anchors.bottom: parent.bottom
+        anchors.left: parent.left
+        anchors.right: parent.right
+        id:footer
+        currentIndex: swipeview.currentIndex
+        TabButton{
+            text:"个人"
+        }
+        TabButton{
+            text:"账本"
+        }
+        TabButton{
+            text:"家庭"
+        }
+    }
+    Component.onCompleted: {
+        swipeview.setCurrentIndex(1)
     }
 
 }
