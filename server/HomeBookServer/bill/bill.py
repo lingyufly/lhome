@@ -28,10 +28,11 @@ def newbill():
     |book_id|integer|M|所属账本|
     |create_time|integer|M|发生时间|
     |bill_type|integer|M|账单类型|
-    |category|intger|M|分类|
-    |tag|intger|M|标签|
+    |category|string|M|分类|
+    |tag|string|M|标签|
     |amount|double|M|金额|
     |comment|string|O|备注信息|
+    |r_user_id|integer|O|对方id|
 
     ### 返回
     | 字段 | 字段类型 | 字段描述 |
@@ -50,6 +51,8 @@ def newbill():
     rcd.tag = args.get('tag')
     rcd.amount = args.get('amount')
     rcd.comment = args.get('comment', '')
+
+    rcd.r_user_id = args.get('r_user_id')
 
     if rcd.user_id is None \
         or rcd.account_id is None \
@@ -124,9 +127,10 @@ def modifybill():
     | 字段 | 字段类型 | 可选/必选 | 字段描述 |
     |id|integer|M|账单id|
     |create_time|integer|O|时间|
-    |category|integer|O|分类|
-    |tag|integer|O|标签|
+    |category|string|O|分类|
+    |tag|string|O|标签|
     |comment|string|O|备注|
+    |amount|double|O|金额|
 
     ### 返回
     | 字段 | 字段类型 | 字段描述 |
@@ -153,6 +157,8 @@ def modifybill():
         rcd.tag = args.get('tag')
     if args.get('comment'):
         rcd.comment = args.get('comment')
+    if args.get('amount'):
+        rcd.amount = args.get('amount')
 
     try:
         dbse.commit()
@@ -181,8 +187,8 @@ def querybill():
     |start_time|integer|O|开始时间查询|
     |end_time|integer|O|结束时间查询|
     |bill_type|integer|O|账单类型查询|
-    |category|integer|O|分类查询|
-    |tag|integer|O|标签查询|
+    |category|string|O|分类查询|
+    |tag|string|O|标签查询|
     |comment|string|O|备注模糊查询|
     |page_index|string|O|分页号，缺省为1|
     |page_size|string|O|每页记录长度，缺省为100，最大为1000|

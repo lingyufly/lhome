@@ -8,7 +8,7 @@
 from sqlalchemy.orm import relationship
 from .db import Base
 import datetime
-from sqlalchemy import Column, Integer, Float, String, ForeignKey
+from sqlalchemy import Column, Integer, Float, Boolean, String, ForeignKey
 
 
 class Wallet(Base):
@@ -65,7 +65,10 @@ class Bill(Base):
     create_time = Column(Integer,
                          default=int(datetime.datetime.now().timestamp()))
     bill_type = Column(Integer)
-    category = Column(Integer)
+    category = Column(String(length=128), default='')
     tag = Column(String(length=128), default='')
     amount = Column(Float, nullable=False)
     comment = Column(String(length=128), default='')
+    confirm = Column(Boolean, default=True)
+    r_user_id = Column(Integer, ForeignKey('user_tab.id'))
+    r_bill_id = Column(Integer, ForeignKey('bill_tab.id'))

@@ -132,15 +132,13 @@ bill_tab
 | book_id     | 所属账本                             | integer |      | account_book_tab.id                                          | fk   |
 | create_time | 时间                                 | integer |      |                                                              |      |
 | bill_type   | 账单类型                             | integer |      | 0: 收入<br />1: 支出<br />2: 借入<br />3: 借出<br />4: 转入<br />5: 转出<br />6: 自转 |      |
-| category    | 分类                                 | integer |      |                                                              |      |
-| remark      | 类型                                 | integer |      |                                                              |      |
+| category    | 分类                                 | string  | 32   |                                                              |      |
+| tag         | 类型                                 | string  | 32   |                                                              |      |
 | amount      | 金额                                 | double  |      |                                                              |      |
 | comment     | 备注信息                             | string  | 128  |                                                              |      |
-| confirm     | 确认标记，转帐、借出、借入完成后确认 | boolean |      |                                                              |      |
-| user1_id    | 对方用户，转帐时使用                 | integer |      | user_tab.id                                                  | fk   |
-| user2_id    | 其他用户                             | integer |      | user_tab.id                                                  | fk   |
-| asset1      | 其他金额，收款金额                   | double  |      |                                                              |      |
-| asset2      | 其他金额                             | double  |      |                                                              |      |
+| confirm     | 确认标记，转帐、借出、借入完成后确认 | bool    |      |                                                              |      |
+| r_user_id   | 对方用户，转帐时使用                 | integer |      | user_tab.id                                                  | fk   |
+| r_bill_id   | 对方记录                             | integer |      | bill_tab.id                                                  | fk   |
 
 
 
